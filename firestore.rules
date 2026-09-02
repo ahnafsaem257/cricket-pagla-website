@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'ADMIN';
+    }
+    
+    function isManagement() {
+      return isAuthenticated() && (getUserData().role == 'MANAGEMENT' || getUserData().role == 'ADMIN');
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isManagement());
+      // Users can only be created by themselves on register (or by admin).
+      // They cannot set their role to ADMIN directly.
+      allow create: if isAuthenticated() && request.auth.uid == userId && request.resource.data.role == 'PLAYER';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Players Collection
+    match /players/{playerId} {
+      allow read: if true; // Public can see players
+      allow create: if isManagement();
+      allow update: if isManagement() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // Matches
+    match /matches/{matchId} {
+      allow read: if true; 
+      allow write: if isManagement();
+    }
+    
+    // Match Performances
+    match /matchPerformances/{perfId} {
+      allow read: if true;
+      allow write: if isManagement();
+    }
+
+    // Tournaments, Series, Special Series
+    match /tournaments/{tourId} { allow read: if true; allow write: if isManagement(); }
+    match /series/{seriesId} { allow read: if true; allow write: if isManagement(); }
+    match /specialSeries/{seriesId} { allow read: if true; allow write: if isManagement(); }
+
+    // Notices, News, Announcements
+    match /notices/{noticeId} { allow read: if true; allow write: if isManagement(); }
+    match /news/{newsId} { allow read: if true; allow write: if isManagement(); }
+    match /announcements/{annId} { allow read: if true; allow write: if isManagement(); }
+
+    // Gallery
+    match /gallery/{imageId} { allow read: if true; allow write: if isManagement(); }
+
+    // Settings
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

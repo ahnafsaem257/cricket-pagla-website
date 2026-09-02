@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cricket-green: #b8860b; /* Repurposed to Dark Gold */
+  --color-cricket-dark: #050505;  /* Deep Black */
+  --color-cricket-gold: #d4af37;  /* Metallic Gold */
+  
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-cricket-dark text-white font-sans;
+  }
+}
