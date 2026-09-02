@@ -1,6 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Trophy, Users, ArrowRight, Activity, CalendarDays } from 'lucide-react';
+
+const AnimatedCounter = ({ end, duration = 2000 }: { end: number; duration?: number }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [hasStarted]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    let startTime: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      setCount(Math.floor(progress * end));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [hasStarted, end, duration]);
+
+  return <div ref={ref} className="text-4xl font-bold text-white mb-1">{count}+</div>;
+};
 
 export const Home: React.FC = () => {
   // In a real application, you might want to fetch these from an aggregated stats document
@@ -15,7 +49,7 @@ export const Home: React.FC = () => {
           <img 
             src="https://res.cloudinary.com/eradnx1z/image/upload/f_auto,q_auto/705698877_122106305739303794_7904985026749609594_n"
             alt="Cricket Stadium" 
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover min-w-full min-h-full"
           />
         </div>
         
@@ -44,22 +78,22 @@ export const Home: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <Users className="mx-auto h-10 w-10 text-cricket-gold mb-3" />
-              <div className="text-4xl font-bold text-white mb-1">45+</div>
+              <AnimatedCounter end={45} />
               <div className="text-sm text-gray-300 uppercase tracking-wide">Total Players</div>
             </div>
             <div>
               <Activity className="mx-auto h-10 w-10 text-cricket-gold mb-3" />
-              <div className="text-4xl font-bold text-white mb-1">120+</div>
+              <AnimatedCounter end={120} />
               <div className="text-sm text-gray-300 uppercase tracking-wide">Matches Played</div>
             </div>
             <div>
               <Trophy className="mx-auto h-10 w-10 text-cricket-gold mb-3" />
-              <div className="text-4xl font-bold text-white mb-1">15</div>
+              <AnimatedCounter end={15} duration={1500} />
               <div className="text-sm text-gray-300 uppercase tracking-wide">Championships</div>
             </div>
             <div>
               <CalendarDays className="mx-auto h-10 w-10 text-cricket-gold mb-3" />
-              <div className="text-4xl font-bold text-white mb-1">8</div>
+              <div className="text-4xl font-bold text-white mb-1">2</div>
               <div className="text-sm text-gray-300 uppercase tracking-wide">Years Active</div>
             </div>
           </div>
