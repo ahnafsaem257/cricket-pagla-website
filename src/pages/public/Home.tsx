@@ -9,7 +9,7 @@ export const Home: React.FC = () => {
   return (
     <div className="bg-cricket-dark">
       {/* Hero Section */}
-      <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[400px] sm:h-[500px] md:h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black/60 z-10" />
           <img 
@@ -20,18 +20,18 @@ export const Home: React.FC = () => {
         </div>
         
         <div className="relative z-20 text-center px-4 sm:px-6 lg:px-8">
-          <img src="/logo.jpg" alt="Cricket Pagla" className="mx-auto h-32 w-32 object-contain rounded-full border-4 border-cricket-gold shadow-2xl mb-6" />
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight uppercase mb-4">
+          <img src="/logo.jpg" alt="Cricket Pagla" className="mx-auto h-20 w-20 sm:h-24 sm:w-24 md:h-32 md:w-32 object-contain rounded-full border-4 border-cricket-gold shadow-2xl mb-6" />
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold text-white tracking-tight uppercase mb-4">
             Cricket <span className="text-cricket-gold">Pagla</span>
           </h1>
           <p className="mt-4 text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto italic font-light">
             "Passion • Performance • Brotherhood"
           </p>
-          <div className="mt-10 flex justify-center gap-4">
-            <Link to="/login" className="px-8 py-3 text-base font-medium rounded-md text-white bg-cricket-green hover:bg-[#0c6632] transition-colors">
+          <div className="mt-6 sm:mt-10 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+            <Link to="/login" className="px-6 py-3 text-sm sm:text-base font-medium rounded-md text-white bg-cricket-green hover:bg-[#0c6632] transition-colors">
               Join Cricket Pagla
             </Link>
-            <Link to="/players" className="px-8 py-3 text-base font-medium rounded-md text-white bg-transparent border-2 border-white hover:bg-white hover:text-cricket-dark transition-colors">
+            <Link to="/players" className="px-6 py-3 text-sm sm:text-base font-medium rounded-md text-white bg-transparent border-2 border-white hover:bg-white hover:text-cricket-dark transition-colors">
               View Players
             </Link>
           </div>
