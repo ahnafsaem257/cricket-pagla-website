@@ -17,13 +17,14 @@ export const PlayerForm: React.FC = () => {
   const [formData, setFormData] = useState<Partial<Player>>({
     fullName: '',
     nickname: '',
-    jerseyNumber: 0,
+    jerseyNumber: null,
     playingRole: 'Batsman',
     battingStyle: 'Right Hand',
     bowlingStyle: 'Right Arm Medium',
     status: 'Active',
     joiningDate: new Date().toISOString().split('T')[0],
     profilePhoto: '',
+    team: 'Cricket Pagla',
     phone: '',
     address: '',
     emergencyContact: '',
@@ -52,7 +53,7 @@ export const PlayerForm: React.FC = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ 
       ...prev, 
-      [name]: name === 'jerseyNumber' ? parseInt(value) || 0 : value 
+      [name]: name === 'jerseyNumber' ? (value === '' ? null : parseInt(value) || 0) : value 
     }));
   };
 
@@ -103,7 +104,7 @@ export const PlayerForm: React.FC = () => {
               storagePath="players"
               defaultImage={formData.profilePhoto}
               onUploadSuccess={(url) => setFormData(prev => ({ ...prev, profilePhoto: url }))}
-              onUploadError={(err) => setError(err.message)}
+              onUploadError={(err) => setError(err?.message || 'Image upload failed. Please try again.')}
             />
           </div>
 
@@ -120,8 +121,8 @@ export const PlayerForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Jersey Number *</label>
-              <input type="number" name="jerseyNumber" required value={formData.jerseyNumber} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <label className="block text-sm font-medium text-gray-400 mb-1">Jersey Number</label>
+              <input type="number" name="jerseyNumber" value={formData.jerseyNumber ?? ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
             </div>
 
             <div>
@@ -131,12 +132,14 @@ export const PlayerForm: React.FC = () => {
                 <option value="Bowler">Bowler</option>
                 <option value="All-Rounder">All-Rounder</option>
                 <option value="Wicket Keeper">Wicket Keeper</option>
+                <option value="Unspecified">Unspecified</option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Batting Style</label>
-              <select name="battingStyle" value={formData.battingStyle} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green">
+              <select name="battingStyle" value={formData.battingStyle ?? ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green">
+                <option value="">Not Set</option>
                 <option value="Right Hand">Right Hand</option>
                 <option value="Left Hand">Left Hand</option>
               </select>
@@ -144,7 +147,8 @@ export const PlayerForm: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Bowling Style</label>
-              <select name="bowlingStyle" value={formData.bowlingStyle} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green">
+              <select name="bowlingStyle" value={formData.bowlingStyle ?? ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green">
+                <option value="">Not Set</option>
                 <option value="Right Arm Fast">Right Arm Fast</option>
                 <option value="Right Arm Medium">Right Arm Medium</option>
                 <option value="Right Arm Spin">Right Arm Spin</option>

@@ -12,27 +12,28 @@ export interface User {
   updatedAt: string;
 }
 
-export type PlayingRole = 'Batsman' | 'Bowler' | 'All-Rounder' | 'Wicket Keeper';
+export type PlayingRole = 'Batsman' | 'Bowler' | 'All-Rounder' | 'Wicket Keeper' | 'Unspecified';
 export type BattingStyle = 'Right Hand' | 'Left Hand';
 export type BowlingStyle = 'Right Arm Fast' | 'Left Arm Fast' | 'Right Arm Medium' | 'Left Arm Medium' | 'Right Arm Spin' | 'Left Arm Spin' | 'Off Spin' | 'Leg Spin';
 export type PlayerStatus = 'Active' | 'Inactive' | 'Injured' | 'Retired';
 
 export interface Player {
-  playerId: string; // Document ID
-  userId?: string; // Associated Firebase Auth UID (if linked)
+  playerId: string;
+  userId?: string;
   fullName: string;
   nickname?: string;
   profilePhoto?: string;
-  jerseyNumber: number;
+  jerseyNumber?: number | null;
   playingRole: PlayingRole;
-  battingStyle: BattingStyle;
-  bowlingStyle: BowlingStyle;
+  battingStyle?: BattingStyle | null;
+  bowlingStyle?: BowlingStyle | null;
+  team?: string;
   teamId?: string;
-  joiningDate: string;
+  joiningDate?: string;
   bio?: string;
-  phone?: string; // Private
-  address?: string; // Private
-  emergencyContact?: string; // Private
+  phone?: string;
+  address?: string;
+  emergencyContact?: string;
   bloodGroup?: string;
   status: PlayerStatus;
   createdAt: string;

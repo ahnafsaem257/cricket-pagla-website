@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cricket-green: #b8860b; /* Repurposed to Dark Gold */
-  --color-cricket-dark: #050505;  /* Deep Black */
-  --color-cricket-gold: #d4af37;  /* Metallic Gold */
+  --color-cricket-green: #b8860b;
+  --color-cricket-dark: #050505;
+  --color-cricket-gold: #d4af37;
   
   --font-sans: 'Inter', system-ui, sans-serif;
 }
@@ -11,5 +11,15 @@
 @layer base {
   body {
     @apply bg-cricket-dark text-white font-sans;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

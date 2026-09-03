@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Upload, X } from 'lucide-react';
 import { uploadImage, deleteImage } from '../../services/firebase/storage';
 
@@ -23,30 +23,57 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   const [progress, setProgress] = useState(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(defaultImage || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    setPreviewUrl(defaultImage || null);
+  }, [defaultImage]);
+
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       if (onUploadError) onUploadError(new Error("File size exceeds 5MB"));
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
       setIsUploading(true);
+      setProgress(0);
       if (onUploadStart) onUploadStart();
 
       const url = await uploadImage(file, storagePath, (p) => setProgress(p));
-      
-      setPreviewUrl(url);
-      onUploadSuccess(url);
+
+      if (!controller.signal.aborted) {
+        setPreviewUrl(url);
+        onUploadSuccess(url);
+      }
     } catch (error: any) {
-      if (onUploadError) onUploadError(error);
+      if (!controller.signal.aborted) {
+        const uploadError = error instanceof Error ? error : new Error(error?.message || 'Upload failed');
+        if (onUploadError) onUploadError(uploadError);
+      }
     } finally {
-      setIsUploading(false);
-      setProgress(0);
+      if (!controller.signal.aborted) {
+        setIsUploading(false);
+        setProgress(0);
+      }
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -69,14 +96,15 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           <button
             type="button"
             onClick={handleRemove}
-            className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full transition-colors shadow-lg"
+            disabled={isUploading}
+            className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full transition-colors shadow-lg disabled:opacity-50"
           >
             <X size={16} />
           </button>
         </div>
       ) : (
         <div 
-          onClick={() => fileInputRef.current?.click()}
+          onClick={() => !isUploading && fileInputRef.current?.click()}
           className="w-full h-full min-h-[200px] border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
         >
           {isUploading ? (
@@ -104,7 +132,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         onChange={handleFileChange}
         accept="image/jpeg, image/png, image/webp"
         className="hidden"
-        disabled={isUploading}
       />
     </div>
   );

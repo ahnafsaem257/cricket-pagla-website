@@ -10,6 +10,7 @@ import { DashboardLayout } from './components/layout/DashboardLayout';
 import { Login } from './pages/auth/Login';
 import { Home } from './pages/public/Home';
 import { Players } from './pages/public/Players';
+import { PlayerProfile } from './pages/public/PlayerProfile';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminPlayers } from './pages/admin/AdminPlayers';
 import { PlayerForm } from './pages/admin/PlayerForm';
@@ -28,6 +29,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<div>About</div>} />
             <Route path="/players" element={<Players />} />
+            <Route path="/players/:id" element={<PlayerProfile />} />
             <Route path="/matches" element={<div>Matches</div>} />
             <Route path="/gallery" element={<div>Gallery</div>} />
             <Route path="/notices" element={<div>Notices</div>} />
