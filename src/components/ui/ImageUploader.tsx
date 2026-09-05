@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, X } from 'lucide-react';
+import { Upload, X, AlertCircle, RefreshCw } from 'lucide-react';
 import { uploadImage, deleteImage } from '../../services/firebase/storage';
 
 interface ImageUploaderProps {
@@ -22,8 +22,10 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(defaultImage || null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [lastFile, setLastFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
     setPreviewUrl(defaultImage || null);
@@ -31,43 +33,35 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
 
   useEffect(() => {
     return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+      mountedRef.current = false;
     };
   }, []);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      if (onUploadError) onUploadError(new Error("File size exceeds 5MB"));
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
-    }
-
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
+  const doUpload = async (file: File) => {
     try {
+      setUploadError(null);
       setIsUploading(true);
       setProgress(0);
       if (onUploadStart) onUploadStart();
 
-      const url = await uploadImage(file, storagePath, (p) => setProgress(p));
+      const url = await uploadImage(file, storagePath, (p) => {
+        if (mountedRef.current) setProgress(p);
+      });
 
-      if (!controller.signal.aborted) {
+      if (mountedRef.current) {
         setPreviewUrl(url);
         onUploadSuccess(url);
+        setLastFile(null);
       }
     } catch (error: any) {
-      if (!controller.signal.aborted) {
+      if (mountedRef.current) {
         const uploadError = error instanceof Error ? error : new Error(error?.message || 'Upload failed');
+        setUploadError(uploadError.message);
         if (onUploadError) onUploadError(uploadError);
+        setLastFile(file);
       }
     } finally {
-      if (!controller.signal.aborted) {
+      if (mountedRef.current) {
         setIsUploading(false);
         setProgress(0);
       }
@@ -77,11 +71,32 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     }
   };
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("File size exceeds 5MB");
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    await doUpload(file);
+  };
+
+  const handleRetry = async () => {
+    if (lastFile) {
+      await doUpload(lastFile);
+    }
+  };
+
   const handleRemove = async () => {
     if (previewUrl && previewUrl !== defaultImage) {
       await deleteImage(previewUrl);
     }
     setPreviewUrl(null);
+    setUploadError(null);
+    setLastFile(null);
     onUploadSuccess('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -103,7 +118,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           </button>
         </div>
       ) : (
-        <div 
+        <div
           onClick={() => !isUploading && fileInputRef.current?.click()}
           className="w-full h-full min-h-[200px] border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
         >
@@ -111,11 +126,27 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             <div className="text-center w-full px-4">
               <div className="mb-2 text-cricket-green font-medium">Uploading... {Math.round(progress)}%</div>
               <div className="w-full bg-gray-600 rounded-full h-2">
-                <div 
-                  className="bg-cricket-green h-2 rounded-full transition-all duration-300" 
+                <div
+                  className="bg-cricket-green h-2 rounded-full transition-all duration-300"
                   style={{ width: `${progress}%` }}
                 />
               </div>
+            </div>
+          ) : uploadError ? (
+            <div className="text-center px-4">
+              <AlertCircle size={32} className="text-red-400 mb-2 mx-auto" />
+              <p className="text-sm text-red-400 font-medium mb-3">{uploadError}</p>
+              {lastFile && (
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); handleRetry(); }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cricket-green hover:bg-[#0c6632] text-white text-sm rounded-md transition-colors"
+                >
+                  <RefreshCw size={14} />
+                  Retry
+                </button>
+              )}
+              <p className="text-xs text-gray-500 mt-3">Click to choose a different file</p>
             </div>
           ) : (
             <>
