@@ -38,6 +38,16 @@ export const getPlayerById = async (playerId: string): Promise<Player | null> =>
   return null;
 };
 
+export const getPlayerByUserId = async (userId: string): Promise<Player | null> => {
+  const q = query(collection(db, 'players'), where('userId', '==', userId));
+  const snapshot = await getDocs(q);
+  if (!snapshot.empty) {
+    const docSnap = snapshot.docs[0];
+    return { ...docSnap.data(), playerId: docSnap.id } as Player;
+  }
+  return null;
+};
+
 export const createPlayer = async (playerData: Omit<Player, 'playerId' | 'createdAt' | 'updatedAt'>): Promise<string> => {
   const newPlayerRef = doc(collection(db, 'players'));
   const player: Player = {

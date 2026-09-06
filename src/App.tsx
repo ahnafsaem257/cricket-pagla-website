@@ -17,6 +17,7 @@ import { PlayerForm } from './pages/admin/PlayerForm';
 import { AdminMatches } from './pages/admin/AdminMatches';
 import { MatchForm } from './pages/admin/MatchForm';
 import { PlayerDashboard } from './pages/player/PlayerDashboard';
+import { PlayerProfileSettings } from './pages/player/PlayerProfileSettings';
 import { ManagementDashboard } from './pages/management/ManagementDashboard';
 
 function App() {
@@ -63,7 +64,7 @@ function App() {
             </RoleProtectedRoute>
           }>
             <Route path="dashboard" element={<PlayerDashboard />} />
-            <Route path="profile" element={<div>Profile</div>} />
+            <Route path="profile" element={<PlayerProfileSettings />} />
             <Route path="matches" element={<div>Matches</div>} />
             <Route path="notices" element={<div>Notices</div>} />
           </Route>
