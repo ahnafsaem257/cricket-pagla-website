@@ -22,8 +22,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      
       if (user) {
         try {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
@@ -40,6 +38,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUserData(null);
       }
       
+      // Set currentUser AFTER fetching userData to ensure components like ProtectedRoute
+      // have both pieces of state available at the same time.
+      setCurrentUser(user);
       setLoading(false);
     });
 

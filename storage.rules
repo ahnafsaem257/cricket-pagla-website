@@ -5,25 +5,20 @@ service firebase.storage {
     function isAuthenticated() {
       return request.auth != null;
     }
-    
-    function isAdmin() {
-      return isAuthenticated() && 
-        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'ADMIN';
+
+    match /players/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
     }
 
-    function isManagement() {
-      return isAuthenticated() && 
-        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['ADMIN', 'MANAGEMENT'];
+    match /users/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == userId;
     }
 
     match /{allPaths=**} {
-      allow read: if true; // Public can see all images
-      allow write: if isManagement();
-    }
-    
-    // Allow users to upload their own profile photo
-    match /users/{userId}/{allPaths=**} {
-      allow write: if isAuthenticated() && request.auth.uid == userId;
+      allow read: if true;
+      allow write: if false;
     }
   }
 }

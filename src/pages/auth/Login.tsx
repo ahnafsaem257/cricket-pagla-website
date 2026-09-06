@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
 import { loginUser, registerUser } from '../../services/firebase/auth';
 import { auth, db } from '../../config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-
+import { useAuth } from '../../contexts/AuthContext';
 export const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -28,26 +28,23 @@ export const Login: React.FC = () => {
     }
   };
 
-  const handlePostAuth = (user: any) => {
-    if (from) {
-      navigate(from, { replace: true });
-      return;
-    }
+  const { currentUser, userData } = useAuth();
 
-    getDoc(doc(db, 'users', user.uid))
-      .then((userDoc) => {
-        if (userDoc.exists()) {
-          const role = userDoc.data()?.role;
-          navigate(getRedirectPath(role), { replace: true });
+  useEffect(() => {
+    if (currentUser) {
+      if (userData) {
+        if (from) {
+          navigate(from, { replace: true });
         } else {
-          setError('User profile not found. Please contact admin.');
+          navigate(getRedirectPath(userData.role), { replace: true });
         }
-      })
-      .catch((err) => {
-        console.error('Error fetching user role:', err);
-        navigate('/', { replace: true });
-      });
-  };
+      } else if (userData === null) {
+        // user is authenticated but no firestore document exists
+        setError('User profile not found. Please contact admin.');
+        setLoading(false);
+      }
+    }
+  }, [currentUser, userData, navigate, from]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,16 +58,9 @@ export const Login: React.FC = () => {
         if (!name) throw new Error('Name is required for registration');
         await registerUser(email, password, name);
       }
-
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        unsubscribe();
-        if (user) {
-          handlePostAuth(user);
-        }
-      });
+      // Navigation is now handled by the useEffect watching currentUser and userData
     } catch (err: any) {
       setError(err.message || 'An error occurred during authentication');
-    } finally {
       setLoading(false);
     }
   };

@@ -29,11 +29,11 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    // Players Collection
+    // Players Collection — TEMP: allow public update for migration script
     match /players/{playerId} {
-      allow read: if true; // Public can see players
+      allow read: if true;
       allow create: if isManagement();
-      allow update: if isManagement() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow update: if true; // TEMP
       allow delete: if isAdmin();
     }
 
