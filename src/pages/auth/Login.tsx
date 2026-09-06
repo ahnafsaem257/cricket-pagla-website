@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
 import { loginUser, registerUser } from '../../services/firebase/auth';
-import { useAuth } from '../../contexts/AuthContext';
+import { auth, db } from '../../config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 
 export const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,8 +16,6 @@ export const Login: React.FC = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { userData, loading: authLoading } = useAuth();
-  const justLoggedIn = useRef(false);
 
   const from = (location.state as any)?.from?.pathname;
 
@@ -28,16 +28,26 @@ export const Login: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (justLoggedIn.current && !authLoading && userData) {
-      justLoggedIn.current = false;
-      if (from) {
-        navigate(from, { replace: true });
-      } else {
-        navigate(getRedirectPath(userData.role), { replace: true });
-      }
+  const handlePostAuth = (user: any) => {
+    if (from) {
+      navigate(from, { replace: true });
+      return;
     }
-  }, [userData, authLoading, navigate, from]);
+
+    getDoc(doc(db, 'users', user.uid))
+      .then((userDoc) => {
+        if (userDoc.exists()) {
+          const role = userDoc.data()?.role;
+          navigate(getRedirectPath(role), { replace: true });
+        } else {
+          setError('User profile not found. Please contact admin.');
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching user role:', err);
+        navigate('/', { replace: true });
+      });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +62,12 @@ export const Login: React.FC = () => {
         await registerUser(email, password, name);
       }
 
-      justLoggedIn.current = true;
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        if (user) {
+          handlePostAuth(user);
+        }
+      });
     } catch (err: any) {
       setError(err.message || 'An error occurred during authentication');
     } finally {
