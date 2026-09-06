@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
 import { loginUser, registerUser } from '../../services/firebase/auth';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,8 +14,30 @@ export const Login: React.FC = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { userData, loading: authLoading } = useAuth();
+  const justLoggedIn = useRef(false);
 
-  const from = (location.state as any)?.from?.pathname || '/';
+  const from = (location.state as any)?.from?.pathname;
+
+  const getRedirectPath = (role: string) => {
+    switch (role) {
+      case 'ADMIN': return '/admin/dashboard';
+      case 'PLAYER': return '/player/dashboard';
+      case 'MANAGEMENT': return '/management/dashboard';
+      default: return '/';
+    }
+  };
+
+  useEffect(() => {
+    if (justLoggedIn.current && !authLoading && userData) {
+      justLoggedIn.current = false;
+      if (from) {
+        navigate(from, { replace: true });
+      } else {
+        navigate(getRedirectPath(userData.role), { replace: true });
+      }
+    }
+  }, [userData, authLoading, navigate, from]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,12 +51,8 @@ export const Login: React.FC = () => {
         if (!name) throw new Error('Name is required for registration');
         await registerUser(email, password, name);
       }
-      
-      // The onAuthStateChanged in AuthContext will update and redirect if protected
-      // But we can manually redirect to dashboard based on typical flow
-      // Since we don't have role synchronously here, we can redirect to home 
-      // or let AuthContext handle redirection if they were on a protected route.
-      navigate(from, { replace: true });
+
+      justLoggedIn.current = true;
     } catch (err: any) {
       setError(err.message || 'An error occurred during authentication');
     } finally {
