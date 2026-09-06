@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
 import { loginUser, registerUser } from '../../services/firebase/auth';
-import { auth, db } from '../../config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
 import { useAuth } from '../../contexts/AuthContext';
 export const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
