@@ -16,6 +16,11 @@ import { AdminPlayers } from './pages/admin/AdminPlayers';
 import { PlayerForm } from './pages/admin/PlayerForm';
 import { AdminMatches } from './pages/admin/AdminMatches';
 import { MatchForm } from './pages/admin/MatchForm';
+import { AdminGallery } from './pages/admin/AdminGallery';
+import { AdminNotices } from './pages/admin/AdminNotices';
+import { NoticeForm } from './pages/admin/NoticeForm';
+import { AdminTournaments } from './pages/admin/AdminTournaments';
+import { TournamentForm } from './pages/admin/TournamentForm';
 import { PlayerDashboard } from './pages/player/PlayerDashboard';
 import { PlayerProfileSettings } from './pages/player/PlayerProfileSettings';
 import { ManagementDashboard } from './pages/management/ManagementDashboard';
@@ -51,9 +56,13 @@ function App() {
             <Route path="matches" element={<AdminMatches />} />
             <Route path="matches/add" element={<MatchForm />} />
             <Route path="matches/edit/:id" element={<MatchForm />} />
-            <Route path="tournaments" element={<div>Tournaments</div>} />
-            <Route path="gallery" element={<div>Gallery</div>} />
-            <Route path="notices" element={<div>Notices</div>} />
+            <Route path="tournaments" element={<AdminTournaments />} />
+            <Route path="tournaments/add" element={<TournamentForm />} />
+            <Route path="tournaments/edit/:id" element={<TournamentForm />} />
+            <Route path="gallery" element={<AdminGallery />} />
+            <Route path="notices" element={<AdminNotices />} />
+            <Route path="notices/add" element={<NoticeForm />} />
+            <Route path="notices/edit/:id" element={<NoticeForm />} />
             <Route path="settings" element={<div>Settings</div>} />
           </Route>
 

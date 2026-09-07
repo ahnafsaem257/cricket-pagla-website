@@ -121,3 +121,23 @@ export interface Announcement {
   status: 'published' | 'draft';
   createdAt: string;
 }
+
+export type TournamentStatus = 'Upcoming' | 'Ongoing' | 'Completed' | 'Cancelled';
+export type TournamentFormat = 'T20' | 'ODI' | 'Test' | 'Friendly' | 'Series';
+
+export interface Tournament {
+  tournamentId: string;
+  name: string;
+  description?: string;
+  logo?: string;
+  startDate: string;
+  endDate?: string;
+  venue?: string;
+  organizer?: string;
+  format: TournamentFormat;
+  teams?: string[];
+  status: TournamentStatus;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
