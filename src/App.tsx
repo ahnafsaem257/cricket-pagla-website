@@ -21,6 +21,8 @@ import { AdminNotices } from './pages/admin/AdminNotices';
 import { NoticeForm } from './pages/admin/NoticeForm';
 import { AdminTournaments } from './pages/admin/AdminTournaments';
 import { TournamentForm } from './pages/admin/TournamentForm';
+import { AdminUsers } from './pages/admin/AdminUsers';
+import { UserForm } from './pages/admin/UserForm';
 import { PlayerDashboard } from './pages/player/PlayerDashboard';
 import { PlayerProfileSettings } from './pages/player/PlayerProfileSettings';
 import { ManagementDashboard } from './pages/management/ManagementDashboard';
@@ -49,7 +51,8 @@ function App() {
             </RoleProtectedRoute>
           }>
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="users" element={<div>Users</div>} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="users/add" element={<UserForm />} />
             <Route path="players" element={<AdminPlayers />} />
             <Route path="players/add" element={<PlayerForm />} />
             <Route path="players/edit/:id" element={<PlayerForm />} />

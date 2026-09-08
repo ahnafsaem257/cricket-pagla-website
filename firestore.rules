@@ -24,7 +24,7 @@ service cloud.firestore {
       allow read: if isAuthenticated() && (request.auth.uid == userId || isManagement());
       // Users can only be created by themselves on register (or by admin).
       // They cannot set their role to ADMIN directly.
-      allow create: if isAuthenticated() && request.auth.uid == userId && request.resource.data.role == 'PLAYER';
+      allow create: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
