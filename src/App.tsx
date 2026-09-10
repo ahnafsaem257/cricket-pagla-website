@@ -15,6 +15,11 @@ import { Notices } from './pages/public/Notices';
 import { GalleryPage } from './pages/public/GalleryPage';
 import { MatchesPage } from './pages/public/MatchesPage';
 import { About } from './pages/public/About';
+import { TeamsPage } from './pages/public/TeamsPage';
+import { TeamDetailPage } from './pages/public/TeamDetailPage';
+import { TournamentsPage } from './pages/public/TournamentsPage';
+
+// Admin
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminPlayers } from './pages/admin/AdminPlayers';
 import { PlayerForm } from './pages/admin/PlayerForm';
@@ -25,10 +30,17 @@ import { AdminNotices } from './pages/admin/AdminNotices';
 import { NoticeForm } from './pages/admin/NoticeForm';
 import { AdminTournaments } from './pages/admin/AdminTournaments';
 import { TournamentForm } from './pages/admin/TournamentForm';
+import { AdminTeams } from './pages/admin/AdminTeams';
+import { TeamForm } from './pages/admin/TeamForm';
 import { AdminUsers } from './pages/admin/AdminUsers';
 import { UserForm } from './pages/admin/UserForm';
+import { AdminSettings } from './pages/admin/AdminSettings';
+
+// Player
 import { PlayerDashboard } from './pages/player/PlayerDashboard';
 import { PlayerProfileSettings } from './pages/player/PlayerProfileSettings';
+
+// Management
 import { ManagementDashboard } from './pages/management/ManagementDashboard';
 
 function App() {
@@ -42,6 +54,9 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/players" element={<Players />} />
             <Route path="/players/:id" element={<PlayerProfile />} />
+            <Route path="/teams" element={<TeamsPage />} />
+            <Route path="/teams/:id" element={<TeamDetailPage />} />
+            <Route path="/tournaments" element={<TournamentsPage />} />
             <Route path="/matches" element={<MatchesPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/notices" element={<Notices />} />
@@ -66,11 +81,14 @@ function App() {
             <Route path="tournaments" element={<AdminTournaments />} />
             <Route path="tournaments/add" element={<TournamentForm />} />
             <Route path="tournaments/edit/:id" element={<TournamentForm />} />
+            <Route path="teams" element={<AdminTeams />} />
+            <Route path="teams/add" element={<TeamForm />} />
+            <Route path="teams/edit/:id" element={<TeamForm />} />
             <Route path="gallery" element={<AdminGallery />} />
             <Route path="notices" element={<AdminNotices />} />
             <Route path="notices/add" element={<NoticeForm />} />
             <Route path="notices/edit/:id" element={<NoticeForm />} />
-            <Route path="settings" element={<div>Settings</div>} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
 
           {/* Player Routes */}

@@ -8,7 +8,7 @@ export interface User {
   role: UserRole;
   status: UserStatus;
   profilePhoto?: string;
-  createdAt: string; // ISO String or Firestore Timestamp
+  createdAt: string;
   updatedAt: string;
 }
 
@@ -51,7 +51,10 @@ export interface Match {
   venue: string;
   teamA: string;
   teamB: string;
+  teamAId?: string;
+  teamBId?: string;
   competition?: string;
+  tournamentId?: string;
   matchType: MatchType;
   tossWinner?: string;
   tossDecision?: 'Bat' | 'Bowl';
@@ -130,14 +133,73 @@ export interface Tournament {
   name: string;
   description?: string;
   logo?: string;
+  banner?: string;
+  season?: string;
   startDate: string;
   endDate?: string;
   venue?: string;
   organizer?: string;
   format: TournamentFormat;
   teams?: string[];
+  teamIds?: string[];
+  champion?: string;
+  runnerUp?: string;
   status: TournamentStatus;
   published: boolean;
   createdAt: string;
+  updatedAt: string;
+}
+
+export interface Team {
+  teamId: string;
+  name: string;
+  shortName?: string;
+  logo?: string;
+  captain?: string;
+  captainId?: string;
+  viceCaptain?: string;
+  viceCaptainId?: string;
+  playerIds?: string[];
+  wins: number;
+  losses: number;
+  draws: number;
+  noResult: number;
+  points: number;
+  netRunRate?: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SiteSettings {
+  id: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  heroImage: string;
+  heroCtaText: string;
+  heroCtaLink: string;
+  heroSecondaryCtaText: string;
+  heroSecondaryCtaLink: string;
+  aboutTitle: string;
+  aboutText: string;
+  aboutImage: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
+  whatsappNumber: string;
+  contactEmail: string;
+  contactPhone: string;
+  contactAddress: string;
+  clubFounded: string;
+  updatedAt: string;
+}
+
+export interface ClubStats {
+  id: string;
+  totalPlayers: number;
+  totalMatches: number;
+  totalTournaments: number;
+  yearsActive: number;
+  totalWins: number;
   updatedAt: string;
 }

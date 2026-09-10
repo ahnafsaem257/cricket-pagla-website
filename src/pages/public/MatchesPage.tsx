@@ -12,8 +12,7 @@ const STATUS_STYLES: Record<MatchStatus, string> = {
 };
 
 type FilterStatus = 'All' | MatchStatus;
-
-const STATUS_OPTIONS: FilterStatus[] = ['All', 'Upcoming', 'Live', 'Completed', 'Postponed', 'Cancelled'];
+const STATUS_OPTIONS: FilterStatus[] = ['All', 'Upcoming', 'Live', 'Completed'];
 
 export const MatchesPage: React.FC = () => {
   const [matches, setMatches] = useState<Match[]>([]);
@@ -22,16 +21,11 @@ export const MatchesPage: React.FC = () => {
 
   useEffect(() => {
     getMatches()
-      .then(data => {
-        setMatches(data.filter(m => m.published));
-        setLoading(false);
-      })
+      .then(data => { setMatches(data.filter(m => m.published)); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
-  const filtered = activeFilter === 'All'
-    ? matches
-    : matches.filter(m => m.status === activeFilter);
+  const filtered = activeFilter === 'All' ? matches : matches.filter(m => m.status === activeFilter);
 
   return (
     <div className="min-h-screen bg-cricket-dark">
@@ -88,91 +82,115 @@ export const MatchesPage: React.FC = () => {
         ) : (
           <div className="max-w-3xl mx-auto space-y-4">
             {filtered.map(match => (
-              <div
-                key={match.matchId}
-                className="bg-gray-900 border border-gray-800 rounded-2xl p-5 sm:p-6 hover:border-gray-700 transition-all"
-              >
-                <div className="flex items-start justify-between gap-3 mb-4">
-                  <div>
-                    <h3 className="text-white font-bold text-lg sm:text-xl">{match.title}</h3>
-                    {match.competition && (
-                      <p className="text-cricket-gold text-sm mt-0.5">{match.competition}</p>
-                    )}
-                  </div>
-                  <span className={`flex-shrink-0 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${STATUS_STYLES[match.status]}`}>
-                    {match.status}
-                  </span>
-                </div>
-
-                {/* Teams */}
-                <div className="flex items-center gap-3 sm:gap-4 mb-4">
-                  <div className="flex-1 text-right">
-                    <span className="text-white font-bold text-base sm:text-lg">{match.teamA}</span>
-                  </div>
-                  <span className="text-gray-500 font-bold text-sm">VS</span>
-                  <div className="flex-1 text-left">
-                    <span className="text-white font-bold text-base sm:text-lg">{match.teamB}</span>
-                  </div>
-                </div>
-
-                {/* Scores */}
-                {(match.teamAScore != null || match.teamBScore != null) && (
-                  <div className="bg-gray-800/50 rounded-xl p-3 mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 text-right">
-                        {match.teamAScore != null && (
-                          <span className="text-white font-mono text-sm">
-                            {match.teamAScore}/{match.teamAWickets} ({match.teamAOvers} ov)
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex-1 text-left">
-                        {match.teamBScore != null && (
-                          <span className="text-white font-mono text-sm">
-                            {match.teamBScore}/{match.teamBWickets} ({match.teamBOvers} ov)
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Result */}
-                {match.winner && (
-                  <p className="text-cricket-gold text-sm font-medium mb-3">
-                    Winner: {match.winner}
-                  </p>
-                )}
-                {match.resultSummary && (
-                  <p className="text-gray-400 text-sm mb-3">{match.resultSummary}</p>
-                )}
-
-                {/* Details */}
-                <div className="flex flex-wrap gap-x-4 gap-y-2 text-gray-500 text-xs">
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarDays size={12} />
-                    {new Date(match.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                  </span>
-                  {match.time && (
-                    <span className="inline-flex items-center gap-1.5">
-                      <Clock size={12} />
-                      {match.time}
-                    </span>
-                  )}
-                  {match.venue && (
-                    <span className="inline-flex items-center gap-1.5">
-                      <MapPin size={12} />
-                      {match.venue}
-                    </span>
-                  )}
-                  <span className="px-2 py-0.5 bg-gray-800 rounded-full text-gray-400">
-                    {match.matchType}
-                  </span>
-                </div>
-              </div>
+              <MatchCard key={match.matchId} match={match} />
             ))}
           </div>
         )}
+      </div>
+    </div>
+  );
+};
+
+const MatchCard: React.FC<{ match: Match }> = ({ match }) => {
+  const isCompleted = match.status === 'Completed';
+
+  return (
+    <div className={`bg-gray-900 border rounded-2xl p-5 sm:p-6 hover:border-gray-700 transition-all ${isCompleted ? 'border-gray-800' : 'border-gray-800'}`}>
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div>
+          <h3 className="text-white font-bold text-lg sm:text-xl">{match.title}</h3>
+          {match.competition && (
+            <p className="text-cricket-gold text-sm mt-0.5">{match.competition}</p>
+          )}
+        </div>
+        <span className={`flex-shrink-0 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${STATUS_STYLES[match.status]}`}>
+          {match.status === 'Live' && <span className="w-1.5 h-1.5 bg-red-400 rounded-full mr-1.5 animate-pulse" />}
+          {match.status}
+        </span>
+      </div>
+
+      {/* Teams VS */}
+      <div className="flex items-center gap-3 sm:gap-4 mb-4">
+        <div className="flex-1 text-right">
+          <span className="text-white font-bold text-base sm:text-lg">{match.teamA}</span>
+        </div>
+        <div className="flex-shrink-0 px-3 py-1 bg-gray-800 rounded-lg">
+          <span className="text-gray-400 font-extrabold text-sm">VS</span>
+        </div>
+        <div className="flex-1 text-left">
+          <span className="text-white font-bold text-base sm:text-lg">{match.teamB}</span>
+        </div>
+      </div>
+
+      {/* Scores */}
+      {(match.teamAScore != null || match.teamBScore != null) && (
+        <div className="bg-gray-800/50 rounded-xl p-4 mb-4">
+          <div className="flex items-center gap-4">
+            <div className="flex-1 text-right">
+              {match.teamAScore != null && (
+                <div>
+                  <span className="text-white font-mono font-bold text-lg">
+                    {match.teamAScore}/{match.teamAWickets}
+                  </span>
+                  <span className="text-gray-400 text-sm ml-2">({match.teamAOvers} ov)</span>
+                </div>
+              )}
+            </div>
+            <div className="flex-shrink-0 text-gray-600 font-bold text-xs">INNINGS</div>
+            <div className="flex-1 text-left">
+              {match.teamBScore != null && (
+                <div>
+                  <span className="text-white font-mono font-bold text-lg">
+                    {match.teamBScore}/{match.teamBWickets}
+                  </span>
+                  <span className="text-gray-400 text-sm ml-2">({match.teamBOvers} ov)</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Result */}
+      {match.resultSummary && (
+        <div className="mb-3 p-2.5 bg-cricket-gold/10 rounded-lg border border-cricket-gold/20">
+          <p className="text-cricket-gold text-sm font-medium text-center">{match.resultSummary}</p>
+        </div>
+      )}
+
+      {match.winner && !match.resultSummary && (
+        <p className="text-cricket-gold text-sm font-medium mb-3 text-center">
+          🏆 Winner: {match.winner}
+        </p>
+      )}
+
+      {match.manOfTheMatch && (
+        <p className="text-gray-400 text-xs mb-3 text-center">
+          ⭐ Player of the Match: <span className="text-white font-medium">{match.manOfTheMatch}</span>
+        </p>
+      )}
+
+      {/* Match Details */}
+      <div className="flex flex-wrap gap-x-4 gap-y-2 text-gray-500 text-xs pt-3 border-t border-gray-800/50">
+        <span className="inline-flex items-center gap-1.5">
+          <CalendarDays size={12} />
+          {new Date(match.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+        </span>
+        {match.time && (
+          <span className="inline-flex items-center gap-1.5">
+            <Clock size={12} />
+            {match.time}
+          </span>
+        )}
+        {match.venue && (
+          <span className="inline-flex items-center gap-1.5">
+            <MapPin size={12} />
+            {match.venue}
+          </span>
+        )}
+        <span className="px-2 py-0.5 bg-gray-800 rounded-full text-gray-400">
+          {match.matchType}
+        </span>
       </div>
     </div>
   );

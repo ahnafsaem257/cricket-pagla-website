@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Users, Heart, Target, ArrowRight } from 'lucide-react';
+import { Trophy, Users, Heart, Target, ArrowRight, Zap } from 'lucide-react';
 
 export const About: React.FC = () => {
   return (
@@ -74,7 +74,7 @@ export const About: React.FC = () => {
               description="Consistent hard work, dedication, and a disciplined approach to fitness and skill development."
             />
             <ValueCard
-              icon={<Heart className="h-8 w-8 text-cricket-gold" />}
+              icon={<Zap className="h-8 w-8 text-cricket-gold" />}
               title="Passion"
               description="The love for cricket drives everything we do. We play with heart, celebrate every moment."
             />
@@ -95,12 +95,12 @@ export const About: React.FC = () => {
               <div className="text-sm text-gray-400 uppercase tracking-wide">Players</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-cricket-gold mb-1">120+</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Matches Played</div>
+              <div className="text-4xl font-bold text-cricket-gold mb-1">64</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Squad Members</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-cricket-gold mb-1">15+</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Championships</div>
+              <div className="text-4xl font-bold text-cricket-gold mb-1">100%</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Passion</div>
             </div>
           </div>
         </div>
@@ -116,13 +116,13 @@ export const About: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/players"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium rounded-md text-white bg-cricket-dark hover:bg-black transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium rounded-lg text-white bg-cricket-dark hover:bg-black transition-colors"
             >
               View Players <ArrowRight size={18} />
             </Link>
             <Link
               to="/login"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium rounded-md text-cricket-dark bg-white hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium rounded-lg text-cricket-dark bg-white hover:bg-gray-100 transition-colors"
             >
               Join Us
             </Link>
@@ -134,7 +134,7 @@ export const About: React.FC = () => {
 };
 
 const ValueCard: React.FC<{ icon: React.ReactNode; title: string; description: string }> = ({ icon, title, description }) => (
-  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center hover:border-cricket-gold/30 transition-all">
+  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center hover:border-cricket-gold/30 transition-all card-hover">
     <div className="inline-flex items-center justify-center w-16 h-16 bg-cricket-gold/10 rounded-full mb-4">
       {icon}
     </div>

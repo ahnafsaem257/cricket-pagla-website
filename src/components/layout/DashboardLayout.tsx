@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
   LayoutDashboard, Users, Trophy, Image, Bell, Settings, 
-  LogOut, Menu, X, ChevronRight, UserCircle, Flag 
+  LogOut, Menu, X, ChevronRight, UserCircle, Flag, Shield 
 } from 'lucide-react';
 
 export const DashboardLayout: React.FC = () => {
@@ -21,6 +21,7 @@ export const DashboardLayout: React.FC = () => {
     { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
     { name: 'Users', path: '/admin/users', icon: <Users size={20} /> },
     { name: 'Players', path: '/admin/players', icon: <UserCircle size={20} /> },
+    { name: 'Teams', path: '/admin/teams', icon: <Shield size={20} /> },
     { name: 'Matches', path: '/admin/matches', icon: <Trophy size={20} /> },
     { name: 'Tournaments', path: '/admin/tournaments', icon: <Flag size={20} /> },
     { name: 'Gallery', path: '/admin/gallery', icon: <Image size={20} /> },

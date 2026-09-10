@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Shirt, User, Activity } from 'lucide-react';
+import { ArrowLeft, Shirt, User, Activity, Trophy, Target, Award } from 'lucide-react';
 import { getPlayerById } from '../../services/players/playerService';
 import type { Player } from '../../types';
 
@@ -13,11 +13,11 @@ const ROLE_COLORS: Record<string, string> = {
 };
 
 const ROLE_BG: Record<string, string> = {
-  'All-Rounder': 'from-emerald-900/30 to-emerald-950/10',
-  'Batsman': 'from-blue-900/30 to-blue-950/10',
-  'Bowler': 'from-red-900/30 to-red-950/10',
-  'Wicket Keeper': 'from-purple-900/30 to-purple-950/10',
-  'Unspecified': 'from-gray-800/30 to-gray-900/10',
+  'All-Rounder': 'from-emerald-900/20 to-emerald-950/5',
+  'Batsman': 'from-blue-900/20 to-blue-950/5',
+  'Bowler': 'from-red-900/20 to-red-950/5',
+  'Wicket Keeper': 'from-purple-900/20 to-purple-950/5',
+  'Unspecified': 'from-gray-800/20 to-gray-900/5',
 };
 
 export const PlayerProfile: React.FC = () => {
@@ -30,17 +30,11 @@ export const PlayerProfile: React.FC = () => {
     if (!id) return;
     getPlayerById(id)
       .then(data => {
-        if (data) {
-          setPlayer(data);
-        } else {
-          setError('Player not found');
-        }
+        if (data) setPlayer(data);
+        else setError('Player not found');
         setLoading(false);
       })
-      .catch(() => {
-        setError('Failed to load player');
-        setLoading(false);
-      });
+      .catch(() => { setError('Failed to load player'); setLoading(false); });
   }, [id]);
 
   if (loading) {
@@ -79,16 +73,11 @@ export const PlayerProfile: React.FC = () => {
             {/* Profile Photo */}
             <div className="relative">
               {player.profilePhoto ? (
-                <img
-                  src={player.profilePhoto}
-                  alt={player.fullName}
-                  className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 border-cricket-gold shadow-2xl"
-                />
+                <img src={player.profilePhoto} alt={player.fullName}
+                  className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 border-cricket-gold shadow-2xl" />
               ) : (
                 <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 border-4 border-cricket-gold shadow-2xl flex items-center justify-center">
-                  <span className="text-5xl sm:text-6xl font-bold text-gray-500">
-                    {player.fullName.charAt(0)}
-                  </span>
+                  <span className="text-5xl sm:text-6xl font-bold text-gray-500">{player.fullName.charAt(0)}</span>
                 </div>
               )}
               {player.jerseyNumber != null && (
@@ -111,6 +100,9 @@ export const PlayerProfile: React.FC = () => {
                     Jersey #{player.jerseyNumber === 0 ? '00' : player.jerseyNumber}
                   </span>
                 )}
+                {player.team && (
+                  <span className="text-gray-400 text-sm">{player.team}</span>
+                )}
               </div>
             </div>
           </div>
@@ -120,8 +112,8 @@ export const PlayerProfile: React.FC = () => {
       {/* Details */}
       <div className="container mx-auto px-4 py-10">
         <div className="max-w-3xl mx-auto space-y-6">
-          {/* Basic Info Card */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+          {/* Player Info Card */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
             <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
               <User size={18} className="text-cricket-gold" />
               Player Information
@@ -144,7 +136,7 @@ export const PlayerProfile: React.FC = () => {
 
           {/* Bio */}
           {player.bio && (
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
               <h2 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
                 <Activity size={18} className="text-cricket-gold" />
                 About
@@ -153,15 +145,19 @@ export const PlayerProfile: React.FC = () => {
             </div>
           )}
 
-          {/* Career Stats Placeholder */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">Career Statistics</h2>
+          {/* Career Stats */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <Trophy size={18} className="text-cricket-gold" />
+              Career Statistics
+            </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-              <StatBox label="Matches" value={0} />
-              <StatBox label="Runs" value={0} />
-              <StatBox label="Wickets" value={0} />
-              <StatBox label="Catches" value={0} />
+              <StatBox icon={<Trophy size={18} />} label="Matches" value={0} />
+              <StatBox icon={<Target size={18} />} label="Runs" value={0} />
+              <StatBox icon={<Activity size={18} />} label="Wickets" value={0} />
+              <StatBox icon={<Award size={18} />} label="Catches" value={0} />
             </div>
+            <p className="text-gray-600 text-xs text-center mt-4">Statistics will be updated by admin after matches</p>
           </div>
         </div>
       </div>
@@ -176,9 +172,10 @@ const InfoRow: React.FC<{ label: string; value: string }> = ({ label, value }) =
   </div>
 );
 
-const StatBox: React.FC<{ label: string; value: number }> = ({ label, value }) => (
-  <div className="bg-gray-800/50 rounded-lg p-4">
-    <div className="text-2xl font-bold text-cricket-gold">{value}</div>
+const StatBox: React.FC<{ icon: React.ReactNode; label: string; value: number }> = ({ icon, label, value }) => (
+  <div className="bg-gray-800/50 rounded-xl p-4">
+    <div className="text-cricket-gold mb-2 flex justify-center">{icon}</div>
+    <div className="text-2xl font-bold text-white">{value}</div>
     <div className="text-xs text-gray-400 uppercase tracking-wide mt-1">{label}</div>
   </div>
 );
