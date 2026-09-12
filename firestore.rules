@@ -2,7 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Functions
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -22,8 +21,6 @@ service cloud.firestore {
     // Users Collection
     match /users/{userId} {
       allow read: if isAuthenticated() && (request.auth.uid == userId || isManagement());
-      // Users can only be created by themselves on register (or by admin).
-      // They cannot set their role to ADMIN directly.
       allow create: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
       allow update: if isAdmin();
       allow delete: if isAdmin();
@@ -37,6 +34,12 @@ service cloud.firestore {
         (isAuthenticated() && request.auth.uid == resource.data.userId) ||
         (isAuthenticated() && !("userId" in resource.data) && request.resource.data.userId == request.auth.uid);
       allow delete: if isAdmin();
+    }
+
+    // Teams
+    match /teams/{teamId} {
+      allow read: if true;
+      allow write: if isManagement();
     }
 
     // Matches
@@ -64,7 +67,25 @@ service cloud.firestore {
     // Gallery
     match /gallery/{imageId} { allow read: if true; allow write: if isManagement(); }
 
-    // Settings
+    // Player of the Month
+    match /playerOfMonth/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Site Settings
+    match /siteSettings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Club Stats
+    match /clubStats/{statId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Settings (legacy)
     match /settings/{settingId} {
       allow read: if true;
       allow write: if isAdmin();

@@ -36,6 +36,20 @@ export interface Player {
   emergencyContact?: string;
   bloodGroup?: string;
   status: PlayerStatus;
+  matches?: number;
+  runs?: number;
+  wickets?: number;
+  catches?: number;
+  runOuts?: number;
+  totalPoints?: number;
+  battingAverage?: number;
+  strikeRate?: number;
+  bowlingAverage?: number;
+  economy?: number;
+  bestScore?: string;
+  bestBowling?: string;
+  isCaptain?: boolean;
+  isViceCaptain?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -93,6 +107,52 @@ export interface MatchPerformance {
   createdAt: string;
 }
 
+export interface Innings {
+  inningsId: string;
+  matchId: string;
+  team: string;
+  teamId?: string;
+  runs: number;
+  wickets: number;
+  overs: number;
+  extras?: number;
+  batting: BattingCard[];
+  bowling: BowlingCard[];
+  fallOfWickets?: FallOfWicket[];
+  createdAt: string;
+}
+
+export interface BattingCard {
+  playerId?: string;
+  player: string;
+  runs: number;
+  balls: number;
+  fours: number;
+  sixes: number;
+  strikeRate?: number;
+  dismissal?: string;
+  isNotOut?: boolean;
+}
+
+export interface BowlingCard {
+  playerId?: string;
+  player: string;
+  overs: number;
+  maidens: number;
+  runs: number;
+  wickets: number;
+  economy?: number;
+  wides?: number;
+  noBalls?: number;
+}
+
+export interface FallOfWicket {
+  wicket: number;
+  runs: number;
+  overs: number;
+  player: string;
+}
+
 export interface Notice {
   noticeId: string;
   title: string;
@@ -100,6 +160,8 @@ export interface Notice {
   category: 'General' | 'Match' | 'Training' | 'Tournament' | 'Meeting' | 'Important';
   priority: 'Normal' | 'Important' | 'Urgent';
   date: string;
+  image?: string;
+  featured?: boolean;
   status: 'published' | 'draft';
   createdAt: string;
   updatedAt: string;
@@ -155,6 +217,7 @@ export interface Team {
   name: string;
   shortName?: string;
   logo?: string;
+  color?: string;
   captain?: string;
   captainId?: string;
   viceCaptain?: string;
@@ -167,6 +230,26 @@ export interface Team {
   points: number;
   netRunRate?: number;
   active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PlayerOfMonth {
+  id: string;
+  month: string;
+  year: number;
+  playerId: string;
+  playerName: string;
+  playerPhoto?: string;
+  team?: string;
+  role?: string;
+  runs?: number;
+  wickets?: number;
+  catches?: number;
+  runOuts?: number;
+  totalPoints: number;
+  description?: string;
+  published: boolean;
   createdAt: string;
   updatedAt: string;
 }

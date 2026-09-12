@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Menu, X, LogIn, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LogIn, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 export const PublicLayout: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const { currentUser, userData } = useAuth();
   const location = useLocation();
 
@@ -17,17 +18,22 @@ export const PublicLayout: React.FC = () => {
 
   useEffect(() => {
     setIsMenuOpen(false);
+    setMoreOpen(false);
   }, [location]);
 
-  const navLinks = [
+  const primaryNav = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
     { name: 'Players', path: '/players' },
     { name: 'Teams', path: '/teams' },
     { name: 'Tournaments', path: '/tournaments' },
     { name: 'Matches', path: '/matches' },
+  ];
+
+  const moreNav = [
+    { name: 'Statistics', path: '/statistics' },
     { name: 'Gallery', path: '/gallery' },
     { name: 'Notices', path: '/notices' },
+    { name: 'About', path: '/about' },
   ];
 
   const getDashboardLink = () => {
@@ -41,6 +47,8 @@ export const PublicLayout: React.FC = () => {
     return location.pathname.startsWith(path);
   };
 
+  const isMoreActive = moreNav.some(n => isActive(n.path));
+
   return (
     <div className="min-h-screen flex flex-col bg-cricket-dark text-white">
       <header
@@ -50,7 +58,7 @@ export const PublicLayout: React.FC = () => {
             : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
@@ -69,7 +77,7 @@ export const PublicLayout: React.FC = () => {
             {/* Desktop Navigation */}
             <nav className="hidden lg:block">
               <ul className="flex items-center gap-1">
-                {navLinks.map((link) => (
+                {primaryNav.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.path}
@@ -86,6 +94,39 @@ export const PublicLayout: React.FC = () => {
                     </Link>
                   </li>
                 ))}
+                {/* More Dropdown */}
+                <li className="relative">
+                  <button
+                    onClick={() => setMoreOpen(!moreOpen)}
+                    onBlur={() => setTimeout(() => setMoreOpen(false), 200)}
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors rounded-md flex items-center gap-1 ${
+                      isMoreActive
+                        ? 'text-cricket-gold'
+                        : 'text-gray-300 hover:text-white'
+                    }`}
+                  >
+                    More
+                    <ChevronDown size={14} className={`transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {moreOpen && (
+                    <div className="absolute top-full right-0 mt-1 bg-gray-900 border border-gray-800 rounded-lg shadow-xl py-1 min-w-[160px]">
+                      {moreNav.map((link) => (
+                        <Link
+                          key={link.name}
+                          to={link.path}
+                          onClick={() => setMoreOpen(false)}
+                          className={`block px-4 py-2 text-sm transition-colors ${
+                            isActive(link.path)
+                              ? 'text-cricket-gold bg-cricket-gold/10'
+                              : 'text-gray-300 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          {link.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </li>
               </ul>
             </nav>
 
@@ -105,7 +146,7 @@ export const PublicLayout: React.FC = () => {
                   className="flex items-center gap-2 bg-cricket-gold hover:bg-cricket-gold-light text-cricket-dark px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 hover:shadow-lg hover:shadow-cricket-gold/20"
                 >
                   <LogIn className="h-4 w-4" />
-                  <span>Login</span>
+                  <span>Player Login</span>
                 </Link>
               )}
             </div>
@@ -126,11 +167,11 @@ export const PublicLayout: React.FC = () => {
         {/* Mobile Menu */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-300 ${
-            isMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+            isMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
           <div className="bg-cricket-dark border-t border-cricket-border px-4 py-4 space-y-1">
-            {navLinks.map((link) => (
+            {primaryNav.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
@@ -144,6 +185,23 @@ export const PublicLayout: React.FC = () => {
                 {link.name}
               </Link>
             ))}
+            <div className="border-t border-cricket-border pt-2 mt-2">
+              <p className="px-4 py-1 text-xs text-gray-500 uppercase tracking-wider">More</p>
+              {moreNav.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+                    isActive(link.path)
+                      ? 'bg-cricket-gold/10 text-cricket-gold border-l-2 border-cricket-gold'
+                      : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
 
             <div className="pt-3 border-t border-cricket-border">
               {currentUser ? (
@@ -160,7 +218,7 @@ export const PublicLayout: React.FC = () => {
                   onClick={() => setIsMenuOpen(false)}
                   className="block px-4 py-3 rounded-lg text-base font-bold bg-cricket-gold text-cricket-dark hover:bg-cricket-gold-light transition-colors text-center"
                 >
-                  Login
+                  Player Login
                 </Link>
               )}
             </div>
@@ -174,8 +232,7 @@ export const PublicLayout: React.FC = () => {
 
       {/* Footer */}
       <footer className="bg-cricket-darker border-t border-cricket-border">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Main Footer */}
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Brand */}
             <div className="sm:col-span-2 lg:col-span-1">
@@ -197,7 +254,7 @@ export const PublicLayout: React.FC = () => {
                   { name: 'Teams', path: '/teams' },
                   { name: 'Tournaments', path: '/tournaments' },
                   { name: 'Matches', path: '/matches' },
-                  { name: 'Gallery', path: '/gallery' },
+                  { name: 'Statistics', path: '/statistics' },
                 ].map((link) => (
                   <li key={link.name}>
                     <Link to={link.path} className="text-gray-400 hover:text-cricket-gold text-sm transition-colors">
@@ -214,8 +271,9 @@ export const PublicLayout: React.FC = () => {
               <ul className="space-y-2.5">
                 {[
                   { name: 'About Us', path: '/about' },
+                  { name: 'Gallery', path: '/gallery' },
                   { name: 'Notices', path: '/notices' },
-                  { name: 'Login', path: '/login' },
+                  { name: 'Player of the Month', path: '/player-of-the-month' },
                 ].map((link) => (
                   <li key={link.name}>
                     <Link to={link.path} className="text-gray-400 hover:text-cricket-gold text-sm transition-colors">
@@ -229,21 +287,18 @@ export const PublicLayout: React.FC = () => {
             {/* Contact */}
             <div>
               <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">Connect</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
+              <p className="text-gray-400 text-sm leading-relaxed mb-4">
                 Join Cricket Pagla and become part of a growing family of passionate cricketers.
               </p>
-              <div className="mt-4">
-                <Link
-                  to="/login"
-                  className="inline-flex items-center gap-2 bg-cricket-gold hover:bg-cricket-gold-light text-cricket-dark px-4 py-2 rounded-lg text-sm font-bold transition-all"
-                >
-                  Join Now
-                </Link>
-              </div>
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 bg-cricket-gold hover:bg-cricket-gold-light text-cricket-dark px-4 py-2 rounded-lg text-sm font-bold transition-all"
+              >
+                Join Now
+              </Link>
             </div>
           </div>
 
-          {/* Bottom Bar */}
           <div className="py-6 border-t border-cricket-border flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-gray-500 text-sm">
               &copy; {new Date().getFullYear()} Cricket Pagla. All rights reserved.

@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trophy, Users, Heart, Target, ArrowRight, Zap } from 'lucide-react';
+import { getClubStats } from '../../services/site/siteService';
+import { getPlayers } from '../../services/players/playerService';
+import type { ClubStats } from '../../types';
 
 export const About: React.FC = () => {
+  const [clubStats, setClubStats] = useState<ClubStats | null>(null);
+  const [playerCount, setPlayerCount] = useState(0);
+
+  useEffect(() => {
+    getClubStats().then(cs => setClubStats(cs)).catch(() => {});
+    getPlayers().then(p => setPlayerCount(p.filter(pl => pl.status === 'Active').length)).catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen bg-cricket-dark">
       {/* Hero */}
@@ -87,16 +98,16 @@ export const About: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-4xl mx-auto">
             <div>
-              <div className="text-4xl font-bold text-cricket-gold mb-1">2+</div>
+              <div className="text-4xl font-bold text-cricket-gold mb-1">{clubStats?.yearsActive || 2}+</div>
               <div className="text-sm text-gray-400 uppercase tracking-wide">Years Active</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-cricket-gold mb-1">60+</div>
+              <div className="text-4xl font-bold text-cricket-gold mb-1">{playerCount || clubStats?.totalPlayers || 60}+</div>
               <div className="text-sm text-gray-400 uppercase tracking-wide">Players</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-cricket-gold mb-1">64</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Squad Members</div>
+              <div className="text-4xl font-bold text-cricket-gold mb-1">{clubStats?.totalMatches || 0}+</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Matches Played</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-cricket-gold mb-1">100%</div>

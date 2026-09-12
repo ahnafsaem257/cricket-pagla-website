@@ -117,22 +117,22 @@ export const PlayerProfileSettings: React.FC = () => {
           <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-400 mb-1">Full Name *</label>
-              <input type="text" name="fullName" required value={formData.fullName || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <input type="text" name="fullName" required value={formData.fullName || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold" />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Nickname</label>
-              <input type="text" name="nickname" value={formData.nickname || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <input type="text" name="nickname" value={formData.nickname || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold" />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Jersey Number</label>
-              <input type="number" name="jerseyNumber" value={formData.jerseyNumber ?? ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <input type="number" name="jerseyNumber" value={formData.jerseyNumber ?? ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold" />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Playing Role</label>
-              <select name="playingRole" value={formData.playingRole || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green">
+              <select name="playingRole" value={formData.playingRole || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold">
                 <option value="Batsman">Batsman</option>
                 <option value="Bowler">Bowler</option>
                 <option value="All-Rounder">All-Rounder</option>
@@ -143,7 +143,7 @@ export const PlayerProfileSettings: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Batting Style</label>
-              <select name="battingStyle" value={formData.battingStyle || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green">
+              <select name="battingStyle" value={formData.battingStyle || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold">
                 <option value="">Not Set</option>
                 <option value="Right Hand">Right Hand</option>
                 <option value="Left Hand">Left Hand</option>
@@ -152,7 +152,7 @@ export const PlayerProfileSettings: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Bowling Style</label>
-              <select name="bowlingStyle" value={formData.bowlingStyle || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green">
+              <select name="bowlingStyle" value={formData.bowlingStyle || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold">
                 <option value="">Not Set</option>
                 <option value="Right Arm Fast">Right Arm Fast</option>
                 <option value="Right Arm Medium">Right Arm Medium</option>
@@ -171,22 +171,22 @@ export const PlayerProfileSettings: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Phone Number</label>
-              <input type="text" name="phone" value={formData.phone || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <input type="text" name="phone" value={formData.phone || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold" />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-1">Blood Group</label>
-              <input type="text" name="bloodGroup" value={formData.bloodGroup || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <input type="text" name="bloodGroup" value={formData.bloodGroup || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold" />
             </div>
 
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-400 mb-1">Address</label>
-              <input type="text" name="address" value={formData.address || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <input type="text" name="address" value={formData.address || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold" />
             </div>
 
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-400 mb-1">Emergency Contact</label>
-              <input type="text" name="emergencyContact" value={formData.emergencyContact || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <input type="text" name="emergencyContact" value={formData.emergencyContact || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold" />
             </div>
 
             <div className="sm:col-span-2 pt-4 border-t border-gray-800">
@@ -195,14 +195,14 @@ export const PlayerProfileSettings: React.FC = () => {
 
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-400 mb-1">Bio</label>
-              <textarea name="bio" rows={3} value={formData.bio || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-green" />
+              <textarea name="bio" rows={3} value={formData.bio || ''} onChange={handleChange} className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-cricket-gold" />
             </div>
 
           </div>
         </div>
         
         <div className="p-4 bg-gray-800/50 border-t border-gray-800 flex justify-end gap-4">
-          <button type="submit" disabled={saving} className="flex items-center gap-2 bg-cricket-green hover:bg-[#0c6632] text-white px-6 py-2 rounded-md font-medium transition-colors disabled:opacity-50">
+          <button type="submit" disabled={saving} className="flex items-center gap-2 bg-cricket-gold hover:bg-cricket-gold-light text-cricket-dark px-6 py-2 rounded-md font-bold transition-colors disabled:opacity-50">
             <Save size={18} />
             {saving ? 'Saving...' : 'Save Profile'}
           </button>

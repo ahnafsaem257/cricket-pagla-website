@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
   LayoutDashboard, Users, Trophy, Image, Bell, Settings, 
-  LogOut, Menu, X, ChevronRight, UserCircle, Flag, Shield 
+  LogOut, Menu, X, ChevronRight, UserCircle, Flag, Shield, Award
 } from 'lucide-react';
 
 export const DashboardLayout: React.FC = () => {
@@ -24,6 +24,7 @@ export const DashboardLayout: React.FC = () => {
     { name: 'Teams', path: '/admin/teams', icon: <Shield size={20} /> },
     { name: 'Matches', path: '/admin/matches', icon: <Trophy size={20} /> },
     { name: 'Tournaments', path: '/admin/tournaments', icon: <Flag size={20} /> },
+    { name: 'POTM', path: '/admin/player-of-the-month', icon: <Award size={20} /> },
     { name: 'Gallery', path: '/admin/gallery', icon: <Image size={20} /> },
     { name: 'Notices', path: '/admin/notices', icon: <Bell size={20} /> },
     { name: 'Settings', path: '/admin/settings', icon: <Settings size={20} /> },
@@ -32,8 +33,6 @@ export const DashboardLayout: React.FC = () => {
   const playerLinks = [
     { name: 'Dashboard', path: '/player/dashboard', icon: <LayoutDashboard size={20} /> },
     { name: 'My Profile', path: '/player/profile', icon: <UserCircle size={20} /> },
-    { name: 'My Matches', path: '/player/matches', icon: <Trophy size={20} /> },
-    { name: 'Notices', path: '/player/notices', icon: <Bell size={20} /> },
   ];
 
   const managementLinks = [
@@ -50,7 +49,6 @@ export const DashboardLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 flex text-gray-100">
-      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -58,7 +56,6 @@ export const DashboardLayout: React.FC = () => {
         />
       )}
 
-      {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 border-r border-gray-800 transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="h-16 flex items-center justify-between px-6 border-b border-gray-800">
           <span className="text-xl font-bold text-cricket-gold uppercase tracking-wider">Cricket Pagla</span>
@@ -68,7 +65,7 @@ export const DashboardLayout: React.FC = () => {
         </div>
         
         <div className="p-4 border-b border-gray-800 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-cricket-green flex items-center justify-center text-white font-bold text-lg">
+          <div className="w-10 h-10 rounded-full bg-cricket-gold flex items-center justify-center text-white font-bold text-lg">
             {userData?.name?.charAt(0) || 'U'}
           </div>
           <div className="overflow-hidden">
@@ -77,7 +74,7 @@ export const DashboardLayout: React.FC = () => {
           </div>
         </div>
 
-        <nav className="p-4 space-y-1">
+        <nav className="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-14rem)]">
           {links.map((link) => {
             const isActive = location.pathname.startsWith(link.path);
             return (
@@ -87,7 +84,7 @@ export const DashboardLayout: React.FC = () => {
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${
                   isActive 
-                    ? 'bg-cricket-green text-white font-medium' 
+                    ? 'bg-cricket-gold text-white font-medium' 
                     : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
                 }`}
               >
@@ -95,7 +92,7 @@ export const DashboardLayout: React.FC = () => {
                 <span>{link.name}</span>
                 {isActive && <ChevronRight size={16} className="ml-auto" />}
               </Link>
-            )
+            );
           })}
         </nav>
 
@@ -110,7 +107,6 @@ export const DashboardLayout: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 bg-gray-950">
         <header className="h-16 flex items-center justify-between px-4 lg:px-8 border-b border-gray-800 bg-gray-900">
           <button

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Trophy, Flag, Image, Bell, TrendingUp, Shield, UserCircle } from 'lucide-react';
+import { Users, Trophy, Flag, Image, Bell, TrendingUp, Shield, UserCircle, Award } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getPlayers } from '../../services/players/playerService';
 import { getMatches } from '../../services/matches/matchService';
@@ -53,8 +53,10 @@ export const AdminDashboard: React.FC = () => {
     { label: 'Add Team', desc: 'Create a new team', path: '/admin/teams/add', icon: <Shield size={18} /> },
     { label: 'New Match', desc: 'Schedule an upcoming match', path: '/admin/matches/add', icon: <Trophy size={18} /> },
     { label: 'New Tournament', desc: 'Create a tournament', path: '/admin/tournaments/add', icon: <Flag size={18} /> },
+    { label: 'Player of Month', desc: 'Set monthly award', path: '/admin/player-of-the-month/add', icon: <Award size={18} /> },
     { label: 'Post Notice', desc: 'Announce to all members', path: '/admin/notices/add', icon: <Bell size={18} /> },
     { label: 'Upload Photos', desc: 'Add to gallery', path: '/admin/gallery', icon: <Image size={18} /> },
+    { label: 'Site Settings', desc: 'Manage website content', path: '/admin/settings', icon: <TrendingUp size={18} /> },
   ];
 
   return (
@@ -66,7 +68,6 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
         {statCards.map((stat, i) => (
           <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-center gap-3">
@@ -81,12 +82,11 @@ export const AdminDashboard: React.FC = () => {
         ))}
       </div>
 
-      {/* Quick Actions */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
           <TrendingUp size={20} className="text-cricket-gold" /> Quick Actions
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {quickActions.map((action) => (
             <Link
               key={action.label}

@@ -16,6 +16,26 @@ service firebase.storage {
       allow write: if isAuthenticated() && request.auth.uid == userId;
     }
 
+    match /gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /player-of-month/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /tournaments/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /teams/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
     match /{allPaths=**} {
       allow read: if true;
       allow write: if false;

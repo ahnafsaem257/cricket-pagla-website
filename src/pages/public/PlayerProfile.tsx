@@ -58,6 +58,7 @@ export const PlayerProfile: React.FC = () => {
 
   const roleColor = ROLE_COLORS[player.playingRole] || ROLE_COLORS['Unspecified'];
   const roleBg = ROLE_BG[player.playingRole] || ROLE_BG['Unspecified'];
+  const hasStats = (player.runs && player.runs > 0) || (player.wickets && player.wickets > 0) || (player.catches && player.catches > 0);
 
   return (
     <div className="min-h-screen bg-cricket-dark">
@@ -70,7 +71,6 @@ export const PlayerProfile: React.FC = () => {
           </Link>
 
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 sm:gap-8">
-            {/* Profile Photo */}
             <div className="relative">
               {player.profilePhoto ? (
                 <img src={player.profilePhoto} alt={player.fullName}
@@ -87,7 +87,6 @@ export const PlayerProfile: React.FC = () => {
               )}
             </div>
 
-            {/* Name & Role */}
             <div className="text-center sm:text-left pb-2">
               <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2">{player.fullName}</h1>
               <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start">
@@ -102,6 +101,12 @@ export const PlayerProfile: React.FC = () => {
                 )}
                 {player.team && (
                   <span className="text-gray-400 text-sm">{player.team}</span>
+                )}
+                {player.isCaptain && (
+                  <span className="text-cricket-gold text-sm font-bold">Captain</span>
+                )}
+                {player.isViceCaptain && (
+                  <span className="text-gray-400 text-sm font-bold">Vice Captain</span>
                 )}
               </div>
             </div>
@@ -151,13 +156,49 @@ export const PlayerProfile: React.FC = () => {
               <Trophy size={18} className="text-cricket-gold" />
               Career Statistics
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-              <StatBox icon={<Trophy size={18} />} label="Matches" value={0} />
-              <StatBox icon={<Target size={18} />} label="Runs" value={0} />
-              <StatBox icon={<Activity size={18} />} label="Wickets" value={0} />
-              <StatBox icon={<Award size={18} />} label="Catches" value={0} />
-            </div>
-            <p className="text-gray-600 text-xs text-center mt-4">Statistics will be updated by admin after matches</p>
+            {hasStats ? (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                  <StatBox icon={<Trophy size={18} />} label="Matches" value={player.matches || 0} />
+                  <StatBox icon={<Target size={18} />} label="Runs" value={player.runs || 0} />
+                  <StatBox icon={<Activity size={18} />} label="Wickets" value={player.wickets || 0} />
+                  <StatBox icon={<Award size={18} />} label="Catches" value={player.catches || 0} />
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center mt-4">
+                  <StatBox icon={<Award size={18} />} label="Run Outs" value={player.runOuts || 0} />
+                  <StatBox icon={<Target size={18} />} label="Total Pts" value={player.totalPoints || 0} />
+                  {player.battingAverage != null && player.battingAverage > 0 && (
+                    <StatBox icon={<TrendingUp size={18} />} label="Bat Avg" value={player.battingAverage} />
+                  )}
+                  {player.strikeRate != null && player.strikeRate > 0 && (
+                    <StatBox icon={<Activity size={18} />} label="Strike Rate" value={player.strikeRate} />
+                  )}
+                  {player.bowlingAverage != null && player.bowlingAverage > 0 && (
+                    <StatBox icon={<Target size={18} />} label="Bowl Avg" value={player.bowlingAverage} />
+                  )}
+                  {player.economy != null && player.economy > 0 && (
+                    <StatBox icon={<Activity size={18} />} label="Economy" value={player.economy} />
+                  )}
+                </div>
+                {player.bestScore && (
+                  <div className="mt-4 p-3 bg-gray-800/50 rounded-lg text-center">
+                    <span className="text-xs text-gray-500 uppercase">Best Score</span>
+                    <p className="text-white font-bold">{player.bestScore}</p>
+                  </div>
+                )}
+                {player.bestBowling && (
+                  <div className="mt-2 p-3 bg-gray-800/50 rounded-lg text-center">
+                    <span className="text-xs text-gray-500 uppercase">Best Bowling</span>
+                    <p className="text-white font-bold">{player.bestBowling}</p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <Trophy size={36} className="mx-auto text-gray-600 mb-3" />
+                <p className="text-gray-400">Statistics will be updated by admin after matches</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -178,4 +219,11 @@ const StatBox: React.FC<{ icon: React.ReactNode; label: string; value: number }>
     <div className="text-2xl font-bold text-white">{value}</div>
     <div className="text-xs text-gray-400 uppercase tracking-wide mt-1">{label}</div>
   </div>
+);
+
+const TrendingUp: React.FC<{ size: number; className?: string }> = ({ size, className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+    <polyline points="16 7 22 7 22 13" />
+  </svg>
 );
