@@ -7,22 +7,22 @@ service cloud.firestore {
     }
     
     function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
     }
     
     function isAdmin() {
-      return isAuthenticated() && getUserData().role == 'ADMIN';
+      return isAuthenticated() && getUserData().data.role == 'ADMIN';
     }
     
     function isManagement() {
-      return isAuthenticated() && (getUserData().role == 'MANAGEMENT' || getUserData().role == 'ADMIN');
+      return isAuthenticated() && (getUserData().data.role == 'MANAGEMENT' || getUserData().data.role == 'ADMIN');
     }
 
     // Users Collection
     match /users/{userId} {
       allow read: if isAuthenticated() && (request.auth.uid == userId || isManagement());
-      allow create: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
-      allow update: if isAdmin();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAdmin() || (isAuthenticated() && request.auth.uid == userId);
       allow delete: if isAdmin();
     }
 
