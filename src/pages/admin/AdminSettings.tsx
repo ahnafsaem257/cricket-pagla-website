@@ -14,8 +14,37 @@ export const AdminSettings: React.FC = () => {
   useEffect(() => {
     Promise.all([getSiteSettings(), getClubStats()])
       .then(([s, cs]) => {
-        setSettings(s);
-        setStats(cs);
+        setSettings(s ?? {
+          id: 'main',
+          heroTitle: 'Cricket Pagla',
+          heroSubtitle: 'Passion • Performance • Brotherhood',
+          heroImage: '',
+          heroCtaText: '',
+          heroCtaLink: '',
+          heroSecondaryCtaText: '',
+          heroSecondaryCtaLink: '',
+          aboutTitle: 'About Cricket Pagla',
+          aboutText: '',
+          aboutImage: '',
+          facebookUrl: '',
+          instagramUrl: '',
+          youtubeUrl: '',
+          whatsappNumber: '',
+          contactEmail: '',
+          contactPhone: '',
+          contactAddress: '',
+          clubFounded: '',
+          updatedAt: '',
+        });
+        setStats(cs ?? {
+          id: 'main',
+          totalPlayers: 0,
+          totalMatches: 0,
+          totalTournaments: 0,
+          yearsActive: 0,
+          totalWins: 0,
+          updatedAt: '',
+        });
         setLoading(false);
       })
       .catch(() => setLoading(false));
