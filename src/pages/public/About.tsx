@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trophy, Users, Heart, Target, ArrowRight, Zap } from 'lucide-react';
-import { getClubStats } from '../../services/site/siteService';
+import { getClubStats, getSiteSettings } from '../../services/site/siteService';
 import { getPlayers } from '../../services/players/playerService';
-import type { ClubStats } from '../../types';
+import type { ClubStats, SiteSettings } from '../../types';
 
 export const About: React.FC = () => {
   const [clubStats, setClubStats] = useState<ClubStats | null>(null);
   const [playerCount, setPlayerCount] = useState(0);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
     getClubStats().then(cs => setClubStats(cs)).catch(() => {});
     getPlayers().then(p => setPlayerCount(p.filter(pl => pl.status === 'Active').length)).catch(() => {});
+    getSiteSettings().then(s => setSiteSettings(s)).catch(() => {});
   }, []);
 
   return (
@@ -25,7 +27,7 @@ export const About: React.FC = () => {
             <span className="text-cricket-gold text-sm font-medium">Our Story</span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight mb-4">
-            About <span className="text-cricket-gold">Cricket Pagla</span>
+            {siteSettings?.aboutTitle || 'About Cricket Pagla'}
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             More than just a club — a brotherhood bound by the love of the game
@@ -40,24 +42,32 @@ export const About: React.FC = () => {
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 sm:p-10">
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Our <span className="text-cricket-gold">Journey</span></h2>
               <div className="space-y-4 text-gray-300 leading-relaxed">
-                <p>
-                  Cricket Pagla was born from a shared dream — a group of passionate cricketers who believed
-                  that the love for the sport could unite people beyond boundaries. What started as informal
-                  games in local grounds has evolved into one of the most competitive and respected cricket
-                  organizations in the region.
-                </p>
-                <p>
-                  Our vision is simple yet powerful: foster local talent, play highly competitive cricket,
-                  and build a community that thrives on discipline, hard work, and the joy of every moment
-                  on the pitch. We believe in nurturing raw talent and providing a platform where players
-                  can showcase their skills and grow together.
-                </p>
-                <p>
-                  From participating in local tournaments to competing in top-tier series and championships,
-                  Cricket Pagla has grown from strength to strength. Every match we play, every practice
-                  session we hold, and every moment we share off the field strengthens the bond that makes
-                  us more than just a team — we are family.
-                </p>
+                {siteSettings?.aboutText ? (
+                  siteSettings.aboutText.split('\n').map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))
+                ) : (
+                  <>
+                    <p>
+                      Cricket Pagla was born from a shared dream — a group of passionate cricketers who believed
+                      that the love for the sport could unite people beyond boundaries. What started as informal
+                      games in local grounds has evolved into one of the most competitive and respected cricket
+                      organizations in the region.
+                    </p>
+                    <p>
+                      Our vision is simple yet powerful: foster local talent, play highly competitive cricket,
+                      and build a community that thrives on discipline, hard work, and the joy of every moment
+                      on the pitch. We believe in nurturing raw talent and providing a platform where players
+                      can showcase their skills and grow together.
+                    </p>
+                    <p>
+                      From participating in local tournaments to competing in top-tier series and championships,
+                      Cricket Pagla has grown from strength to strength. Every match we play, every practice
+                      session we hold, and every moment we share off the field strengthens the bond that makes
+                      us more than just a team — we are family.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>
