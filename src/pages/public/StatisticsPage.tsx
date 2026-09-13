@@ -83,10 +83,10 @@ export const StatisticsPage: React.FC = () => {
                         <tr className="border-b border-gray-800">
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">#</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">Player</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">Team</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium hidden sm:table-cell">Team</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Runs</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Avg</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">SR</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right hidden sm:table-cell">Avg</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right hidden md:table-cell">SR</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -104,13 +104,13 @@ export const StatisticsPage: React.FC = () => {
                                     <span className="text-xs font-bold text-gray-500">{player.fullName.charAt(0)}</span>
                                   </div>
                                 )}
-                                <span className="text-white font-medium text-sm group-hover:text-cricket-gold transition-colors">{player.fullName}</span>
+                                <span className="text-white font-medium text-sm group-hover:text-cricket-gold transition-colors truncate">{player.fullName}</span>
                               </Link>
                             </td>
-                            <td className="px-4 py-3 text-gray-400 text-sm">{player.team || 'Cricket Pagla'}</td>
+                            <td className="px-4 py-3 text-gray-400 text-sm hidden sm:table-cell">{player.team || 'Cricket Pagla'}</td>
                             <td className="px-4 py-3 text-white font-bold text-sm text-right">{player.runs}</td>
-                            <td className="px-4 py-3 text-gray-300 text-sm text-right">{player.battingAverage?.toFixed(1) || '-'}</td>
-                            <td className="px-4 py-3 text-gray-300 text-sm text-right">{player.strikeRate?.toFixed(1) || '-'}</td>
+                            <td className="px-4 py-3 text-gray-300 text-sm text-right hidden sm:table-cell">{player.battingAverage?.toFixed(1) || '-'}</td>
+                            <td className="px-4 py-3 text-gray-300 text-sm text-right hidden md:table-cell">{player.strikeRate?.toFixed(1) || '-'}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -134,10 +134,10 @@ export const StatisticsPage: React.FC = () => {
                         <tr className="border-b border-gray-800">
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">#</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">Player</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">Team</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium hidden sm:table-cell">Team</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Wickets</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Avg</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Econ</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right hidden sm:table-cell">Avg</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right hidden md:table-cell">Econ</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -155,13 +155,13 @@ export const StatisticsPage: React.FC = () => {
                                     <span className="text-xs font-bold text-gray-500">{player.fullName.charAt(0)}</span>
                                   </div>
                                 )}
-                                <span className="text-white font-medium text-sm group-hover:text-cricket-gold transition-colors">{player.fullName}</span>
+                                <span className="text-white font-medium text-sm group-hover:text-cricket-gold transition-colors truncate">{player.fullName}</span>
                               </Link>
                             </td>
-                            <td className="px-4 py-3 text-gray-400 text-sm">{player.team || 'Cricket Pagla'}</td>
+                            <td className="px-4 py-3 text-gray-400 text-sm hidden sm:table-cell">{player.team || 'Cricket Pagla'}</td>
                             <td className="px-4 py-3 text-white font-bold text-sm text-right">{player.wickets}</td>
-                            <td className="px-4 py-3 text-gray-300 text-sm text-right">{player.bowlingAverage?.toFixed(1) || '-'}</td>
-                            <td className="px-4 py-3 text-gray-300 text-sm text-right">{player.economy?.toFixed(2) || '-'}</td>
+                            <td className="px-4 py-3 text-gray-300 text-sm text-right hidden sm:table-cell">{player.bowlingAverage?.toFixed(1) || '-'}</td>
+                            <td className="px-4 py-3 text-gray-300 text-sm text-right hidden md:table-cell">{player.economy?.toFixed(2) || '-'}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -185,9 +185,9 @@ export const StatisticsPage: React.FC = () => {
                         <tr className="border-b border-gray-800">
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">#</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">Player</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">Team</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium hidden sm:table-cell">Team</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Catches</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Run Outs</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right hidden sm:table-cell">Run Outs</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Total</th>
                         </tr>
                       </thead>
@@ -206,12 +206,12 @@ export const StatisticsPage: React.FC = () => {
                                     <span className="text-xs font-bold text-gray-500">{player.fullName.charAt(0)}</span>
                                   </div>
                                 )}
-                                <span className="text-white font-medium text-sm group-hover:text-cricket-gold transition-colors">{player.fullName}</span>
+                                <span className="text-white font-medium text-sm group-hover:text-cricket-gold transition-colors truncate">{player.fullName}</span>
                               </Link>
                             </td>
-                            <td className="px-4 py-3 text-gray-400 text-sm">{player.team || 'Cricket Pagla'}</td>
+                            <td className="px-4 py-3 text-gray-400 text-sm hidden sm:table-cell">{player.team || 'Cricket Pagla'}</td>
                             <td className="px-4 py-3 text-white font-bold text-sm text-right">{player.catches || 0}</td>
-                            <td className="px-4 py-3 text-white font-bold text-sm text-right">{player.runOuts || 0}</td>
+                            <td className="px-4 py-3 text-white font-bold text-sm text-right hidden sm:table-cell">{player.runOuts || 0}</td>
                             <td className="px-4 py-3 text-cricket-gold font-bold text-sm text-right">{(player.catches || 0) + (player.runOuts || 0)}</td>
                           </tr>
                         ))}
@@ -237,7 +237,7 @@ export const StatisticsPage: React.FC = () => {
                         <tr className="border-b border-gray-800">
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">#</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">Player</th>
-                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium">Team</th>
+                          <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium hidden sm:table-cell">Team</th>
                           <th className="px-4 py-3 text-xs text-gray-400 uppercase tracking-wider font-medium text-right">Points</th>
                         </tr>
                       </thead>
@@ -256,10 +256,10 @@ export const StatisticsPage: React.FC = () => {
                                     <span className="text-xs font-bold text-gray-500">{player.fullName.charAt(0)}</span>
                                   </div>
                                 )}
-                                <span className="text-white font-medium text-sm group-hover:text-cricket-gold transition-colors">{player.fullName}</span>
+                                <span className="text-white font-medium text-sm group-hover:text-cricket-gold transition-colors truncate">{player.fullName}</span>
                               </Link>
                             </td>
-                            <td className="px-4 py-3 text-gray-400 text-sm">{player.team || 'Cricket Pagla'}</td>
+                            <td className="px-4 py-3 text-gray-400 text-sm hidden sm:table-cell">{player.team || 'Cricket Pagla'}</td>
                             <td className="px-4 py-3 text-cricket-gold font-bold text-sm text-right">{player.totalPoints}</td>
                           </tr>
                         ))}

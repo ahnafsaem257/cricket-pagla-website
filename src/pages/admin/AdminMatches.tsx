@@ -74,11 +74,11 @@ export const AdminMatches: React.FC = () => {
           <table className="w-full text-left text-sm text-gray-400">
             <thead className="text-xs text-gray-400 uppercase bg-gray-800 border-b border-gray-700">
               <tr>
-                <th className="px-6 py-4">Match</th>
-                <th className="px-6 py-4">Date & Time</th>
-                <th className="px-6 py-4">Type</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-4 py-3">Match</th>
+                <th className="px-4 py-3 hidden sm:table-cell">Date & Time</th>
+                <th className="px-4 py-3 hidden md:table-cell">Type</th>
+                <th className="px-4 py-3 hidden sm:table-cell">Status</th>
+                <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -93,18 +93,19 @@ export const AdminMatches: React.FC = () => {
               ) : (
                 filteredMatches.map((match) => (
                   <tr key={match.matchId} className="border-b border-gray-800 hover:bg-gray-800/50">
-                    <td className="px-6 py-4">
-                      <div className="font-bold text-white mb-1">{match.title}</div>
-                      <div className="text-xs">{match.teamA} vs {match.teamB}</div>
+                    <td className="px-4 py-3">
+                      <div className="font-bold text-white mb-1 truncate">{match.title}</div>
+                      <div className="text-xs text-gray-500">{match.teamA} vs {match.teamB}</div>
+                      <div className="text-xs text-gray-500 sm:hidden mt-0.5">{match.date}</div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <div className="flex items-center gap-2">
                         <CalendarIcon size={14} className="text-gray-500" />
                         <span>{match.date} {match.time && `| ${match.time}`}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">{match.matchType}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden md:table-cell">{match.matchType}</td>
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <span className={`px-2 py-1 text-xs rounded-full ${
                         match.status === 'Completed' ? 'bg-green-900/50 text-green-400 border border-green-800' :
                         match.status === 'Live' ? 'bg-red-900/50 text-red-400 border border-red-800' :
@@ -114,8 +115,8 @@ export const AdminMatches: React.FC = () => {
                         {match.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-1 sm:gap-2">
                         <Link 
                           to={`/admin/matches/edit/${match.matchId}`}
                           className="p-2 text-blue-400 hover:bg-blue-900/30 rounded-md transition-colors"

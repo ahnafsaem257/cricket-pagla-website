@@ -192,11 +192,11 @@ export const PlayerForm: React.FC = () => {
           </div>
         </div>
         
-        <div className="p-4 bg-gray-800/50 border-t border-gray-800 flex justify-end gap-4">
-          <Link to="/admin/players" className="px-6 py-2 rounded-md font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition-colors">
+        <div className="p-4 bg-gray-800/50 border-t border-gray-800 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
+          <Link to="/admin/players" className="px-6 py-2.5 rounded-md font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition-colors text-center">
             Cancel
           </Link>
-          <button type="submit" disabled={saving} className="flex items-center gap-2 bg-cricket-green hover:bg-[#0c6632] text-white px-6 py-2 rounded-md font-medium transition-colors disabled:opacity-50">
+          <button type="submit" disabled={saving} className="flex items-center justify-center gap-2 bg-cricket-green hover:bg-[#0c6632] text-white px-6 py-2.5 rounded-md font-medium transition-colors disabled:opacity-50">
             <Save size={18} />
             {saving ? 'Saving...' : 'Save Player'}
           </button>

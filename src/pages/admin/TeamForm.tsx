@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Upload, X } from 'lucide-react';
+import { Upload, X, ArrowLeft } from 'lucide-react';
 import { getTeamById, createTeam, updateTeam } from '../../services/teams/teamService';
 import { getActivePlayers } from '../../services/players/playerService';
 import { uploadImage } from '../../services/firebase/storage';
@@ -98,7 +98,12 @@ export const TeamForm: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-white mb-6">{isEdit ? 'Edit Team' : 'Create Team'}</h1>
+      <div className="flex items-center gap-4 mb-6">
+        <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-white transition-colors">
+          <ArrowLeft size={20} />
+        </button>
+        <h1 className="text-2xl font-bold text-white">{isEdit ? 'Edit Team' : 'Create Team'}</h1>
+      </div>
 
       {error && (
         <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg text-sm mb-4">{error}</div>

@@ -211,11 +211,11 @@ export const PlayerOfMonthForm: React.FC = () => {
           </label>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-gray-800">
+        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-800">
           <button type="button" onClick={() => navigate(-1)}
-            className="px-4 py-2 text-gray-400 hover:text-white transition-colors text-sm">Cancel</button>
+            className="px-4 py-2.5 text-gray-400 hover:text-white transition-colors text-sm text-center">Cancel</button>
           <button type="submit" disabled={saving}
-            className="flex items-center gap-2 bg-cricket-gold text-cricket-dark px-6 py-2 rounded-lg font-bold text-sm hover:bg-cricket-gold-light transition-colors disabled:opacity-50">
+            className="flex items-center justify-center gap-2 bg-cricket-gold text-cricket-dark px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-cricket-gold-light transition-colors disabled:opacity-50">
             <Save size={16} /> {saving ? 'Saving...' : isEdit ? 'Update' : 'Create'}
           </button>
         </div>

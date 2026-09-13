@@ -20,7 +20,7 @@ export const ManagementPlayers: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Manage Players</h1>
           <p className="text-gray-400 text-sm mt-1">View and update player profiles</p>
@@ -42,9 +42,9 @@ export const ManagementPlayers: React.FC = () => {
               <thead>
                 <tr className="border-b border-gray-800">
                   <th className="px-4 py-3 text-xs text-gray-400 uppercase font-medium">Player</th>
-                  <th className="px-4 py-3 text-xs text-gray-400 uppercase font-medium">Role</th>
-                  <th className="px-4 py-3 text-xs text-gray-400 uppercase font-medium">Team</th>
-                  <th className="px-4 py-3 text-xs text-gray-400 uppercase font-medium">Status</th>
+                  <th className="px-4 py-3 text-xs text-gray-400 uppercase font-medium hidden sm:table-cell">Role</th>
+                  <th className="px-4 py-3 text-xs text-gray-400 uppercase font-medium hidden md:table-cell">Team</th>
+                  <th className="px-4 py-3 text-xs text-gray-400 uppercase font-medium hidden sm:table-cell">Status</th>
                   <th className="px-4 py-3 text-xs text-gray-400 uppercase font-medium">Action</th>
                 </tr>
               </thead>
@@ -60,12 +60,15 @@ export const ManagementPlayers: React.FC = () => {
                             <span className="text-xs font-bold text-gray-500">{player.fullName.charAt(0)}</span>
                           </div>
                         )}
-                        <span className="text-white text-sm font-medium">{player.fullName}</span>
+                        <div className="min-w-0">
+                          <span className="text-white text-sm font-medium block truncate">{player.fullName}</span>
+                          <span className="text-gray-500 text-xs sm:hidden">{player.playingRole}</span>
+                        </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-gray-400 text-sm">{player.playingRole}</td>
-                    <td className="px-4 py-3 text-gray-400 text-sm">{player.team || 'Cricket Pagla'}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 text-gray-400 text-sm hidden sm:table-cell">{player.playingRole}</td>
+                    <td className="px-4 py-3 text-gray-400 text-sm hidden md:table-cell">{player.team || 'Cricket Pagla'}</td>
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${player.status === 'Active' ? 'bg-emerald-900/50 text-emerald-400' : 'bg-gray-800 text-gray-400'}`}>
                         {player.status}
                       </span>

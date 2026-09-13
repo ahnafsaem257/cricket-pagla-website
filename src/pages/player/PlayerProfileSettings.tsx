@@ -201,8 +201,8 @@ export const PlayerProfileSettings: React.FC = () => {
           </div>
         </div>
         
-        <div className="p-4 bg-gray-800/50 border-t border-gray-800 flex justify-end gap-4">
-          <button type="submit" disabled={saving} className="flex items-center gap-2 bg-cricket-gold hover:bg-cricket-gold-light text-cricket-dark px-6 py-2 rounded-md font-bold transition-colors disabled:opacity-50">
+        <div className="p-4 bg-gray-800/50 border-t border-gray-800 flex justify-end">
+          <button type="submit" disabled={saving} className="flex items-center justify-center gap-2 bg-cricket-gold hover:bg-cricket-gold-light text-cricket-dark px-6 py-2.5 rounded-md font-bold transition-colors disabled:opacity-50 w-full sm:w-auto">
             <Save size={18} />
             {saving ? 'Saving...' : 'Save Profile'}
           </button>

@@ -142,11 +142,11 @@ export const AdminUsers: React.FC = () => {
           <table className="w-full text-left text-sm text-gray-400">
             <thead className="text-xs text-gray-400 uppercase bg-gray-800 border-b border-gray-700">
               <tr>
-                <th className="px-6 py-4">User</th>
-                <th className="px-6 py-4">Role</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Joined</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-4 py-3">User</th>
+                <th className="px-4 py-3 hidden sm:table-cell">Role</th>
+                <th className="px-4 py-3 hidden md:table-cell">Status</th>
+                <th className="px-4 py-3 hidden lg:table-cell">Joined</th>
+                <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -161,22 +161,25 @@ export const AdminUsers: React.FC = () => {
               ) : (
                 filteredUsers.map((user) => (
                   <tr key={user.uid} className="border-b border-gray-800 hover:bg-gray-800/50">
-                    <td className="px-6 py-4 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden flex-shrink-0">
-                        {user.profilePhoto ? (
-                          <img src={user.profilePhoto} alt={user.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-cricket-gold font-bold">
-                            {user.name.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-medium text-white">{user.name}</div>
-                        <div className="text-xs">{user.email}</div>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden flex-shrink-0">
+                          {user.profilePhoto ? (
+                            <img src={user.profilePhoto} alt={user.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-cricket-gold font-bold">
+                              {user.name.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-medium text-white truncate">{user.name}</div>
+                          <div className="text-xs text-gray-500 truncate sm:hidden">{user.role} · {user.status}</div>
+                          <div className="text-xs text-gray-500 truncate hidden sm:block">{user.email}</div>
+                        </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <select
                         value={user.role}
                         onChange={(e) => handleRoleChange(user.uid, e.target.value as UserRole)}
@@ -191,7 +194,7 @@ export const AdminUsers: React.FC = () => {
                         <option value="MANAGEMENT">MANAGEMENT</option>
                       </select>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden md:table-cell">
                       <span className={`px-2 py-1 text-xs rounded-full ${
                         user.status === 'ACTIVE' ? 'bg-green-900/50 text-green-400 border border-green-800' :
                         user.status === 'DISABLED' ? 'bg-red-900/50 text-red-400 border border-red-800' :
@@ -200,11 +203,11 @@ export const AdminUsers: React.FC = () => {
                         {user.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-xs">
+                    <td className="px-4 py-3 text-xs hidden lg:table-cell">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-1 sm:gap-2">
                         <button
                           onClick={() => handleStatusToggle(user.uid, user.status)}
                           className={`p-2 rounded-md transition-colors ${

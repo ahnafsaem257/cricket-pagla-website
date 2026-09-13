@@ -31,11 +31,30 @@
   body {
     @apply bg-cricket-dark text-white font-sans antialiased;
     overflow-x: hidden;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   ::selection {
     background-color: rgba(212, 175, 55, 0.3);
     color: white;
+  }
+
+  input, select, textarea, button {
+    touch-action: manipulation;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  @media (max-width: 639px) {
+    table td, table th {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      font-size: 0.75rem;
+    }
   }
 }
 

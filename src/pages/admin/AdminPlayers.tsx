@@ -143,11 +143,11 @@ export const AdminPlayers: React.FC = () => {
           <table className="w-full text-left text-sm text-gray-400">
             <thead className="text-xs text-gray-400 uppercase bg-gray-800 border-b border-gray-700">
               <tr>
-                <th className="px-6 py-4">Player</th>
-                <th className="px-6 py-4">Role</th>
-                <th className="px-6 py-4">Jersey</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-4 py-3">Player</th>
+                <th className="px-4 py-3 hidden sm:table-cell">Role</th>
+                <th className="px-4 py-3 hidden md:table-cell">Jersey</th>
+                <th className="px-4 py-3 hidden sm:table-cell">Status</th>
+                <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -162,28 +162,31 @@ export const AdminPlayers: React.FC = () => {
               ) : (
                 filteredPlayers.map((player) => (
                   <tr key={player.playerId} className="border-b border-gray-800 hover:bg-gray-800/50">
-                    <td className="px-6 py-4 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden flex-shrink-0">
-                        {player.profilePhoto ? (
-                          <img src={player.profilePhoto} alt={player.fullName} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-cricket-gold font-bold">
-                            {player.fullName.charAt(0)}
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-medium text-white">{player.fullName}</div>
-                        <div className="text-xs">{player.nickname || '-'}</div>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden flex-shrink-0">
+                          {player.profilePhoto ? (
+                            <img src={player.profilePhoto} alt={player.fullName} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-cricket-gold font-bold">
+                              {player.fullName.charAt(0)}
+                            </div>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-medium text-white truncate">{player.fullName}</div>
+                          <div className="text-xs text-gray-500 truncate sm:hidden">{player.playingRole} · {player.jerseyNumber != null ? `#${player.jerseyNumber}` : ''}</div>
+                          <div className="text-xs hidden sm:block">{player.nickname || '-'}</div>
+                        </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <span className="text-xs">{player.playingRole}</span>
                     </td>
-                    <td className="px-6 py-4 font-bold text-white">
+                    <td className="px-4 py-3 font-bold text-white hidden md:table-cell">
                       {player.jerseyNumber != null ? (player.jerseyNumber === 0 ? '00' : player.jerseyNumber) : '-'}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <span className={`px-2 py-1 text-xs rounded-full ${
                         player.status === 'Active' ? 'bg-green-900/50 text-green-400 border border-green-800' :
                         player.status === 'Injured' ? 'bg-red-900/50 text-red-400 border border-red-800' :
@@ -192,8 +195,8 @@ export const AdminPlayers: React.FC = () => {
                         {player.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-1 sm:gap-2">
                         <Link
                           to={`/admin/players/edit/${player.playerId}`}
                           className="p-2 text-blue-400 hover:bg-blue-900/30 rounded-md transition-colors"

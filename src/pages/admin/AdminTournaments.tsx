@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Search, Edit, Trash2, Flag, MapPin, Users, Trophy } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Flag, Users, Trophy } from 'lucide-react';
 import { getTournaments, deleteTournament } from '../../services/tournaments/tournamentService';
 import type { Tournament } from '../../types';
 
@@ -98,18 +98,18 @@ export const AdminTournaments: React.FC = () => {
             <table className="w-full text-left text-sm text-gray-400">
               <thead className="text-xs text-gray-400 uppercase bg-gray-800 border-b border-gray-700">
                 <tr>
-                  <th className="px-6 py-4">Tournament</th>
-                  <th className="px-6 py-4">Dates</th>
-                  <th className="px-6 py-4">Format</th>
-                  <th className="px-6 py-4">Teams</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+                  <th className="px-4 py-3">Tournament</th>
+                  <th className="px-4 py-3 hidden sm:table-cell">Dates</th>
+                  <th className="px-4 py-3 hidden md:table-cell">Format</th>
+                  <th className="px-4 py-3 hidden lg:table-cell">Teams</th>
+                  <th className="px-4 py-3 hidden sm:table-cell">Status</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredTournaments.map(tournament => (
                   <tr key={tournament.tournamentId} className="border-b border-gray-800 hover:bg-gray-800/50">
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {tournament.logo ? (
                           <img src={tournament.logo} alt={tournament.name} className="w-10 h-10 rounded-md object-cover flex-shrink-0" />
@@ -120,43 +120,33 @@ export const AdminTournaments: React.FC = () => {
                         )}
                         <div className="min-w-0">
                           <div className="font-bold text-white mb-0.5 truncate">{tournament.name}</div>
-                          {tournament.organizer && <div className="text-xs">{tournament.organizer}</div>}
-                          {tournament.venue && (
-                            <div className="flex items-center gap-1 text-xs mt-0.5">
-                              <MapPin size={11} />
-                              <span>{tournament.venue}</span>
-                            </div>
-                          )}
+                          {tournament.organizer && <div className="text-xs text-gray-500 truncate">{tournament.organizer}</div>}
+                          <div className="text-xs text-gray-500 sm:hidden">{tournament.startDate}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <div className="text-xs">{tournament.startDate}</div>
                       {tournament.endDate && <div className="text-xs text-gray-500 mt-1">to {tournament.endDate}</div>}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden md:table-cell">
                       <span className="px-2 py-1 text-xs rounded-full bg-gray-800 border border-gray-700">
                         {tournament.format}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden lg:table-cell">
                       <div className="flex items-center gap-1">
                         <Users size={13} className="text-gray-500" />
                         <span>{tournament.teams?.length || 0}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <span className={`px-2 py-1 text-xs rounded-full ${STATUS_COLORS[tournament.status]}`}>
                         {tournament.status}
                       </span>
-                      {tournament.published ? (
-                        <span className="block mt-1 text-[10px] text-green-400">Published</span>
-                      ) : (
-                        <span className="block mt-1 text-[10px] text-yellow-400">Draft</span>
-                      )}
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-1 sm:gap-2">
                         <Link
                           to={`/admin/tournaments/edit/${tournament.tournamentId}`}
                           title="Edit"
