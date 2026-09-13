@@ -21,30 +21,32 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        setCurrentUser(user);
         try {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
-          if (userDoc.exists()) {
-            setUserData({ ...userDoc.data(), uid: user.uid } as User);
-          } else {
-            setUserData(null);
+          if (active) {
+            if (userDoc.exists()) {
+              setUserData({ ...userDoc.data(), uid: user.uid } as User);
+            } else {
+              setUserData(null);
+            }
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
-          setUserData(null);
         }
       } else {
+        setCurrentUser(user);
         setUserData(null);
       }
-      
-      // Set currentUser AFTER fetching userData to ensure components like ProtectedRoute
-      // have both pieces of state available at the same time.
-      setCurrentUser(user);
-      setLoading(false);
+
+      if (active) setLoading(false);
     });
 
-    return unsubscribe;
+    return () => { active = false; unsubscribe(); };
   }, []);
 
   const logout = async () => {
